@@ -99,6 +99,11 @@ import com.google.common.collect.Sets;
  * <td>32-bit signed int</td>
  * </tr>
  * <tr>
+ * <td>smallint</td>
+ * <td>Short</td>
+ * <td>16-bit signed int</td>
+ * </tr>
+ * <tr>
  * <td>text</td>
  * <td>String</td>
  * <td>UTF8 encoded string</td>
@@ -727,7 +732,7 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     			return (Object) currentRow.getString(index-1);
     		}else if (typeName.equals("integer")){
     			return (Object) currentRow.getInt(index-1);
-    		}else if (typeName.equals("bigint")){        		
+    		}else if (typeName.equals("bigint")){
     			return (Object) currentRow.getLong(index-1);
     		}else if (typeName.equals("blob")){
     			return (Object) currentRow.getBytes(index-1);
@@ -735,7 +740,7 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     			return (Object) currentRow.getBool(index-1);
     		}else if (typeName.equals("counter")){
     			return (Object) currentRow.getLong(index-1);
-    		}else if (typeName.equals("decimal")){        			
+    		}else if (typeName.equals("decimal")){
     			return (Object) currentRow.getDecimal(index-1);
     		}else if (typeName.equals("double")){
     			return (Object) currentRow.getDouble(index-1);
@@ -747,7 +752,7 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     			return (Object) currentRow.getInt(index-1);
     		}else if (typeName.equals("text")){
     			return (Object) currentRow.getString(index-1);
-    		}else if (typeName.equals("timestamp")){        			
+    		}else if (typeName.equals("timestamp")){
     	        return (Object) new Timestamp((currentRow.getTimestamp(index-1)).getTime());
     		}else if (typeName.equals("uuid")){
     			return (Object) currentRow.getUUID(index-1);
@@ -755,14 +760,13 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     			return (Object) currentRow.getUUID(index-1);
     		}else if (typeName.equals("varint")){
     	        return (Object) currentRow.getInt(index-1);
+            }else if (typeName.equals("smallint")){
+                return (Object) currentRow.getShort(index-1);
+            }else if (typeName.equals("tinyint")){
+                return (Object) currentRow.getByte(index-1);
     		}
-    		
-        			
-        
         }
-        	
-        		
-        
+
         return null; 
     }
 
@@ -817,22 +821,20 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
         			valueType = TypesMap.getTypeForComparator("udt").getType();
         		}else if( datatypes.get(1).getName().toString().equals("tuple")){
         			valueType = TypesMap.getTypeForComparator("tuple").getType();
-        			
         		}
-        		
+
         		return (Object) Maps.newHashMap(currentRow.getMap(name,keyType,valueType));
         	}
-        
         }else{
         	String typeName = currentRow.getColumnDefinitions().getType(name).getName().toString();
-        	
-    		if (typeName.equals("varchar")){
+
+        	if (typeName.equals("varchar")){
     			return (Object) currentRow.getString(name);
     		}else if (typeName.equals("ascii")){
     			return (Object) currentRow.getString(name);
     		}else if (typeName.equals("integer")){
     			return (Object) currentRow.getInt(name);
-    		}else if (typeName.equals("bigint")){        		
+    		}else if (typeName.equals("bigint")){
     			return (Object) currentRow.getLong(name);
     		}else if (typeName.equals("blob")){
     			return (Object) currentRow.getBytes(name);
@@ -860,6 +862,10 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     			return (Object) currentRow.getUUID(name);
     		}else if (typeName.equals("varint")){
     	        return (Object) currentRow.getInt(name);
+            }else if (typeName.equals("smallint")){
+                return (Object) currentRow.getShort(name);
+            }else if (typeName.equals("tinyint")){
+                return (Object) currentRow.getByte(name);
     		}
         	
         }
@@ -1210,6 +1216,8 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
 	            if (jtype instanceof JdbcUUID) length = 36;
 	            if (jtype instanceof JdbcInt32) length = 4;
 	            if (jtype instanceof JdbcLong) length = 8;
+	            if (jtype instanceof JdbcShort) length = 2;
+                if (jtype instanceof JdbcByte) length = 1;
             	// String stringValue = getObject(column).toString();
             	//return (stringValue == null ? -1 : stringValue.length());
 	            

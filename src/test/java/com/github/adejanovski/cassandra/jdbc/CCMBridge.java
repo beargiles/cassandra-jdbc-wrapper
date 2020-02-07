@@ -39,6 +39,7 @@ import org.testng.annotations.BeforeClass;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Cluster.Builder;
+import com.datastax.driver.core.EndPoint;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.exceptions.AlreadyExistsException;
 import com.datastax.driver.core.exceptions.DriverException;
@@ -358,7 +359,7 @@ public class CCMBridge {
                 session = cluster.connect();
             } catch (NoHostAvailableException e) {
                 erroredOut = true;
-                for (Map.Entry<InetSocketAddress, Throwable> entry : e.getErrors().entrySet())
+                for (Map.Entry<EndPoint, Throwable> entry : e.getErrors().entrySet())
                     logger.info("Error connecting to " + entry.getKey() + ": " + entry.getValue());
                 throw new RuntimeException(e);
             }
@@ -455,7 +456,7 @@ public class CCMBridge {
                 this.cluster = builder.addContactPoints(contactPoints).build();
                 this.session = cluster.connect();
             } catch (NoHostAvailableException e) {
-                for (Map.Entry<InetSocketAddress, Throwable> entry : e.getErrors().entrySet())
+                for (Map.Entry<EndPoint, Throwable> entry : e.getErrors().entrySet())
                     logger.info("Error connecting to " + entry.getKey() + ": " + entry.getValue());
                 discard();
                 throw new RuntimeException(e);

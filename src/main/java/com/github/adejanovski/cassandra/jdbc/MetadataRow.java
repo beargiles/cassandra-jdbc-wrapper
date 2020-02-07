@@ -114,7 +114,7 @@ public class MetadataRow{
 		return getBool(names.get(name));
 	}
 
- 
+	
 	public int getInt(int i) {
 		return Integer.parseInt(entries.get(i));
 	}
@@ -133,6 +133,24 @@ public class MetadataRow{
 	public long getLong(String name) {
 		return getLong(names.get(name));
 	}
+	 
+    public long getShort(int i) {
+        return Short.parseShort(entries.get(i));
+    }
+
+ 
+    public long getShort(String name) {
+        return getShort(names.get(name));
+    }
+    
+    public long getByte(int i) {
+        return Byte.parseByte(entries.get(i));
+    }
+
+ 
+    public long getByte(String name) {
+        return getByte(names.get(name));
+    }
 
  
 	public Date getDate(int i) {

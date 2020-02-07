@@ -90,6 +90,11 @@ import com.google.common.collect.Lists;
  * <td>32-bit signed int</td>
  * </tr>
  * <tr>
+ * <td>smallint</td>
+ * <td>Short</td>
+ * <td>16-bit signed int</td>
+ * </tr>
+ * <tr>
  * <td>text</td>
  * <td>String</td>
  * <td>UTF8 encoded string</td>
@@ -644,6 +649,10 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
 			return currentRow.getUUID(index-1);
 		}else if (typeName.equals("varint")){
 	        return currentRow.getInt(index-1);
+        }else if (typeName.equals("smallint")){
+            return currentRow.getShort(index-1);
+        }else if (typeName.equals("tinyint")){
+            return currentRow.getByte(index-1);
 		}
     		        	
         
@@ -691,6 +700,10 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
 			return currentRow.getUUID(name);
 		}else if (typeName.equals("varint")){
 	        return currentRow.getInt(name);
+        }else if (typeName.equals("smallint")){
+            return currentRow.getShort(name);
+        }else if (typeName.equals("tinyint")){
+            return currentRow.getByte(name);
 		}
         	
         
@@ -1043,6 +1056,7 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
 		            if (jtype instanceof JdbcUUID) length = 36;
 		            if (jtype instanceof JdbcInt32) length = 4;
 		            if (jtype instanceof JdbcLong) length = 8;
+		            if (jtype instanceof JdbcShort) length = 2;
 	            	// String stringValue = getObject(column).toString();
 	            	//return (stringValue == null ? -1 : stringValue.length());
 		            

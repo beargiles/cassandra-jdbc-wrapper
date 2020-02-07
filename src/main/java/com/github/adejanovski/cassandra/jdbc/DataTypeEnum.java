@@ -14,6 +14,7 @@ import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.TupleValue;
 import com.datastax.driver.core.UDTValue;
 import com.datastax.driver.core.DataType.Name;
+import com.datastax.driver.core.Duration;
 import com.datastax.driver.core.exceptions.DriverInternalError;
 import com.google.common.collect.Maps;
 
@@ -24,27 +25,29 @@ public enum DataTypeEnum {
         BLOB      (3,  ByteBuffer.class, DataType.Name.BLOB),
         BOOLEAN   (4,  Boolean.class, DataType.Name.BOOLEAN),
         COUNTER   (5,  Long.class, DataType.Name.COUNTER),
+        DATE      (17, Date.class, DataType.Name.DATE),
         DECIMAL   (6,  BigDecimal.class, DataType.Name.DECIMAL),
         DOUBLE    (7,  Double.class, DataType.Name.DOUBLE),
+        DURATION  (21, Duration.class, DataType.Name.DURATION),
         FLOAT     (8,  Float.class, DataType.Name.FLOAT),
         INET      (16, InetAddress.class, DataType.Name.INET),
         INT       (9,  Integer.class, DataType.Name.INT),
+        SMALLINT  (19, Short.class, DataType.Name.SMALLINT),
         TEXT      (10, String.class, DataType.Name.TEXT),
+        TIME      (18, Date.class, DataType.Name.TIME),
         TIMESTAMP (11, Date.class, DataType.Name.TIMESTAMP),
+        TIMEUUID  (15, UUID.class, DataType.Name.TIMEUUID),
+        TINYINT   (20, Byte.class, DataType.Name.TINYINT),
         UUID      (12, UUID.class, DataType.Name.UUID),
         VARCHAR   (13, String.class, DataType.Name.VARCHAR),
         VARINT    (14, BigInteger.class, DataType.Name.VARINT),
-        TIMEUUID  (15, UUID.class, DataType.Name.TIMEUUID),
+
         LIST      (32, List.class, DataType.Name.LIST),
         SET       (34, Set.class, DataType.Name.SET),
         MAP       (33, Map.class, DataType.Name.MAP),
         UDT       (48, UDTValue.class, DataType.Name.UDT),
         TUPLE     (49, TupleValue.class, DataType.Name.TUPLE),
-        CUSTOM    (0,  ByteBuffer.class, DataType.Name.CUSTOM),       
-        SMALLINT  (19, Integer.class, DataType.Name.SMALLINT),
-        TINYINT   (20, Integer.class, DataType.Name.TINYINT),
-        DATE      (17, Date.class, DataType.Name.DATE),
-        TIME      (18, Date.class, DataType.Name.TIME);
+        CUSTOM    (0,  ByteBuffer.class, DataType.Name.CUSTOM);
 
         final int protocolId;
         final Class<?> javaType;
@@ -52,11 +55,11 @@ public enum DataTypeEnum {
 
         private static final DataTypeEnum[] nameToIds;
         private static final Map<DataType.Name, DataTypeEnum> cqlDataTypeToDataType;
-        
+
         static {
-        	
+
         	cqlDataTypeToDataType = Maps.newHashMap();
-        	
+	
             int maxCode = -1;
             for (DataTypeEnum name : DataTypeEnum.values())
                 maxCode = Math.max(maxCode, name.protocolId);
@@ -65,7 +68,7 @@ public enum DataTypeEnum {
                 if (nameToIds[name.protocolId] != null)
                     throw new IllegalStateException("Duplicate Id");
                 nameToIds[name.protocolId] = name;
-                
+
                 cqlDataTypeToDataType.put(name.cqlType, name);
             }
         }
@@ -76,11 +79,10 @@ public enum DataTypeEnum {
             this.cqlType = cqlType;
         }
 
-        
         static DataTypeEnum fromCqlTypeName(DataType.Name cqlTypeName) {
         	return cqlDataTypeToDataType.get(cqlTypeName);
         }
-        
+
         static DataTypeEnum fromProtocolId(int id) {
         	DataTypeEnum name = nameToIds[id];
             if (name == null)
@@ -134,6 +136,7 @@ public enum DataTypeEnum {
          *   <tr><td>VARCHAR       </td><td>String</td></tr>
          *   <tr><td>VARINT        </td><td>BigInteger</td></tr>
          *   <tr><td>TIMEUUID      </td><td>UUID</td></tr>
+         *   <--------------------------------------------------------------------
          * </table>
          *
          * @return the java Class corresponding to this CQL type name.

@@ -15,6 +15,7 @@
 package com.github.adejanovski.cassandra.jdbc;
 
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
 import java.util.ArrayList;
@@ -37,10 +38,16 @@ import com.datastax.driver.core.exceptions.DriverException;
 import com.datastax.driver.core.policies.RoundRobinPolicy;
 import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.github.adejanovski.cassandra.jdbc.codec.BigDecimalToBigintCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.ByteBufferToByteCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.ByteToByteBufferCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.ByteToIntCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.DoubleToDecimalCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.DoubleToFloatCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.IntToByteCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.IntToLongCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.IntToShortCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.LongToIntCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.ShortToIntCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.TimestampToLongCodec;
 
 import static com.github.adejanovski.cassandra.jdbc.Utils.*;
@@ -182,19 +189,26 @@ class SessionHolder {
         // Declare and register codecs
         List<TypeCodec<?>> codecs = new ArrayList<TypeCodec<?>>();
         CodecRegistry customizedRegistry = new CodecRegistry();
-        
-        codecs.add(new TimestampToLongCodec(Long.class));
-        codecs.add(new LongToIntCodec(Integer.class));
-        codecs.add(new IntToLongCodec(Long.class));
+
+        //codecs.add(new ByteBufferToByteCodec(Byte.class));  <-- duplicates TinyIntCodec (tinyint <-> Byte)>
+        //codecs.add(new ByteToByteBufferCodec(ByteBuffer.class)); <!-- duplicates BlobCodec (blob <-> ByteBuffer)
+
+        // - codecs.add(new ByteToIntCodec(Integer.class)); <-- no impact?
+        // - codecs.add(new IntToByteCodec(Byte.class)); <-- no impact?
+
         codecs.add(new BigDecimalToBigintCodec(BigDecimal.class));
         codecs.add(new DoubleToDecimalCodec(Double.class));
         codecs.add(new DoubleToFloatCodec(Double.class));
-        
+        codecs.add(new IntToLongCodec(Long.class));
+        codecs.add(new IntToShortCodec(Short.class));
+        codecs.add(new LongToIntCodec(Integer.class));
+        codecs.add(new ShortToIntCodec(Integer.class));
+        codecs.add(new TimestampToLongCodec(Long.class));
+
         customizedRegistry.register(codecs);
-        
         builder.withCodecRegistry(customizedRegistry);
-        // end of codec register
-        
+        // end of codec register5
+
         Cluster cluster = null;
         try {
             cluster = builder.build();

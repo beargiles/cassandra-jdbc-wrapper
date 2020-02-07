@@ -173,6 +173,7 @@ public  class MetadataResultSets
 		    		            if (jtype instanceof JdbcUUID) length = 36;
 		    		            if (jtype instanceof JdbcInt32) length = 4;
 		    		            if (jtype instanceof JdbcLong) length = 8;
+		    		            if (jtype instanceof JdbcShort) length = 2;
 		    					
 		    		            //NUM_PREC_RADIX
 		    		            int npr = 2;
