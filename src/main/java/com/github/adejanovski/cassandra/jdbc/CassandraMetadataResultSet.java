@@ -90,6 +90,11 @@ import com.google.common.collect.Lists;
  * <td>32-bit signed int</td>
  * </tr>
  * <tr>
+ * <td>smallint</td>
+ * <td>Short</td>
+ * <td>16-bit signed int</td>
+ * </tr>
+ * <tr>
  * <td>text</td>
  * <td>String</td>
  * <td>UTF8 encoded string</td>
@@ -350,12 +355,12 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
 
     public byte getByte(int index) throws SQLException {
         checkIndex(index);
-        return currentRow.getBytes(index - 1).get();
+        return (byte) currentRow.getByte(index - 1);
     }
 
     public byte getByte(String name) throws SQLException {
         checkName(name);
-        return currentRow.getBytes(name).get();
+        return (byte) currentRow.getByte(name);
     }
 
     public byte[] getBytes(int index) throws SQLException {
@@ -373,10 +378,7 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
 
     public Date getDate(int index) throws SQLException {
         checkIndex(index);
-        if (currentRow.getDate(index - 1) == null) {
-            return null;
-        }
-        return new java.sql.Date(currentRow.getDate(index - 1).getTime());
+        return currentRow.getDate(index - 1);
     }
 
     public Date getDate(int index, Calendar calendar) throws SQLException {
@@ -387,10 +389,7 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
 
     public Date getDate(String name) throws SQLException {
         checkName(name);
-        if (currentRow.getDate(name) == null) {
-            return null;
-        }
-        return new java.sql.Date(currentRow.getDate(name).getTime());
+        return currentRow.getDate(name);
     }
 
     public Date getDate(String name, Calendar calendar) throws SQLException {
@@ -581,23 +580,33 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
             return currentRow.getBool(index - 1);
         } else if (typeName.equals("counter")) {
             return currentRow.getLong(index - 1);
+        } else if (typeName.equals("date")) {
+            return currentRow.getDate(index - 1);
         } else if (typeName.equals("decimal")) {
             return currentRow.getDecimal(index - 1);
         } else if (typeName.equals("double")) {
             return currentRow.getDouble(index - 1);
+        } else if (typeName.equals("duration")) {
+            return currentRow.getDuration(index - 1);
         } else if (typeName.equals("float")) {
             return currentRow.getFloat(index - 1);
         } else if (typeName.equals("inet")) {
             return currentRow.getInet(index - 1);
         } else if (typeName.equals("int")) {
             return currentRow.getInt(index - 1);
+        } else if (typeName.equals("smallint")) {
+            return currentRow.getShort(index - 1);
         } else if (typeName.equals("text")) {
             return currentRow.getString(index - 1);
+        } else if (typeName.equals("time")) {
+            return currentRow.getTime(index - 1);
         } else if (typeName.equals("timestamp")) {
-            return new Timestamp((currentRow.getDate(index - 1)).getTime());
-        } else if (typeName.equals("uuid")) {
-            return currentRow.getUUID(index - 1);
+            return currentRow.getTimestamp(index - 1);
+        } else if (typeName.equals("tinyint")) {
+            return currentRow.getByte(index - 1);
         } else if (typeName.equals("timeuuid")) {
+            return currentRow.getUUID(index - 1);
+        } else if (typeName.equals("uuid")) {
             return currentRow.getUUID(index - 1);
         } else if (typeName.equals("varint")) {
             return currentRow.getInt(index - 1);
@@ -626,23 +635,33 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
             return currentRow.getBool(name);
         } else if (typeName.equals("counter")) {
             return currentRow.getLong(name);
+        } else if (typeName.equals("date")) {
+            return currentRow.getDate(name);
         } else if (typeName.equals("decimal")) {
             return currentRow.getDecimal(name);
         } else if (typeName.equals("double")) {
             return currentRow.getDouble(name);
+        } else if (typeName.equals("duration")) {
+            return currentRow.getDuration(name);
         } else if (typeName.equals("float")) {
             return currentRow.getFloat(name);
         } else if (typeName.equals("inet")) {
             return currentRow.getInet(name);
         } else if (typeName.equals("int")) {
             return currentRow.getInt(name);
+        } else if (typeName.equals("smallint")) {
+            return currentRow.getShort(name);
         } else if (typeName.equals("text")) {
             return currentRow.getString(name);
+        } else if (typeName.equals("time")) {
+            return currentRow.getTime(name);
         } else if (typeName.equals("timestamp")) {
-            return new Timestamp((currentRow.getDate(name)).getTime());
-        } else if (typeName.equals("uuid")) {
-            return currentRow.getUUID(name);
+            return currentRow.getTimestamp(name);
         } else if (typeName.equals("timeuuid")) {
+            return currentRow.getUUID(name);
+        } else if (typeName.equals("tinyint")) {
+            return currentRow.getByte(name);
+        } else if (typeName.equals("uuid")) {
             return currentRow.getUUID(name);
         } else if (typeName.equals("varint")) {
             return currentRow.getInt(name);
@@ -752,27 +771,18 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
 
     public Timestamp getTimestamp(int index) throws SQLException {
         checkIndex(index);
-        java.util.Date date = currentRow.getDate(index - 1);
-        if (date == null)
-            return null;
-        return new Timestamp(currentRow.getDate(index - 1).getTime());
+        return currentRow.getTimestamp(index - 1);
     }
 
     public Timestamp getTimestamp(int index, Calendar calendar) throws SQLException {
         checkIndex(index);
         // silently ignore the Calendar argument; its a hint we do not need
-        java.util.Date date = currentRow.getDate(index - 1);
-        if (date == null)
-            return null;
         return getTimestamp(index - 1);
     }
 
     public Timestamp getTimestamp(String name) throws SQLException {
         checkName(name);
-        java.util.Date date = currentRow.getDate(name);
-        if (date == null)
-            return null;
-        return new Timestamp(currentRow.getDate(name).getTime());
+        return currentRow.getTimestamp(name);
     }
 
     public Timestamp getTimestamp(String name, Calendar calendar) throws SQLException {
@@ -958,10 +968,14 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
                     length = Integer.MAX_VALUE;
                 if (jtype instanceof JdbcUUID)
                     length = 36;
-                if (jtype instanceof JdbcInt32)
-                    length = 4;
                 if (jtype instanceof JdbcLong)
                     length = 8;
+                if (jtype instanceof JdbcInt)
+                    length = 4;
+                if (jtype instanceof JdbcShort)
+                    length = 2;
+                if (jtype instanceof JdbcByte)
+                    length = 1;
                 // String stringValue = getObject(column).toString();
                 // return (stringValue == null ? -1 : stringValue.length());
 

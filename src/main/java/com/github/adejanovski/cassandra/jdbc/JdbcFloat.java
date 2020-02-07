@@ -44,11 +44,22 @@ public class JdbcFloat extends AbstractJdbcType<Float> {
     }
 
     public String toString(Float obj) {
-        return obj.toString();
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
         return false;
+    }
+
+    public String getString(ByteBuffer bytes) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 4) {
+            throw new MarshalException(
+                    "A float is exactly 4 bytes: " + bytes.remaining());
+        }
+
+        return toString(bytes.getFloat(bytes.position()));
     }
 
     public Class<Float> getType() {
@@ -64,6 +75,6 @@ public class JdbcFloat extends AbstractJdbcType<Float> {
     }
 
     public Object decompose(Float value) {
-        return (Object) value;
+        return value;
     }
 }

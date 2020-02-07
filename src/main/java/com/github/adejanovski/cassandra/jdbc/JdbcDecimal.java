@@ -15,7 +15,6 @@
 package com.github.adejanovski.cassandra.jdbc;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.sql.Types;
 
@@ -30,11 +29,11 @@ public class JdbcDecimal extends AbstractJdbcType<BigDecimal> {
     }
 
     public int getScale(BigDecimal obj) {
-        return obj.scale();
+        return (obj == null) ? 0 : obj.scale();
     }
 
     public int getPrecision(BigDecimal obj) {
-        return obj.precision();
+        return (obj == null) ? Integer.MAX_VALUE : obj.precision();
     }
 
     public boolean isCurrency() {
@@ -46,7 +45,7 @@ public class JdbcDecimal extends AbstractJdbcType<BigDecimal> {
     }
 
     public String toString(BigDecimal obj) {
-        return obj.toPlainString();
+        return (obj == null) ? null : obj.toPlainString();
     }
 
     public boolean needsQuotes() {
@@ -54,11 +53,11 @@ public class JdbcDecimal extends AbstractJdbcType<BigDecimal> {
     }
 
     public String getString(ByteBuffer bytes) {
-        if (bytes == null)
-            return "null";
-        if (bytes.remaining() == 0)
-            return "empty";
-        return compose(bytes).toPlainString();
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        }
+
+        return toString(compose(bytes));
     }
 
     public Class<BigDecimal> getType() {
@@ -78,7 +77,6 @@ public class JdbcDecimal extends AbstractJdbcType<BigDecimal> {
      * the n bytes it takes to store a BigInteger.
      */
     public Object decompose(BigDecimal value) {
-        return (Object) value;
+        return value;
     }
-
 }

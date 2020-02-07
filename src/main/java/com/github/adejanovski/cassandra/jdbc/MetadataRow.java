@@ -19,8 +19,12 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +43,7 @@ public class MetadataRow {
 
     private ArrayList<String> entries;
     private HashMap<String, Integer> names;
+    @SuppressWarnings("unused")
     private ColumnDefinitions colDefinitions;
     private ArrayList<ColumnDefinitions.Definition> definitions;
 
@@ -46,7 +51,6 @@ public class MetadataRow {
         entries = Lists.newArrayList();
         names = Maps.newHashMap();
         definitions = Lists.newArrayList();
-
     }
 
     public MetadataRow addEntry(String key, String value) {
@@ -111,13 +115,28 @@ public class MetadataRow {
         return getLong(names.get(name));
     }
 
-    public Date getDate(int i) {
-        return null;
+    public long getShort(int i) {
+        return Short.parseShort(entries.get(i));
     }
 
-    public Date getDate(String name) {
+    public long getShort(String name) {
+        return getShort(names.get(name));
+    }
 
-        return null;
+    public long getByte(int i) {
+        return Byte.parseByte(entries.get(i));
+    }
+
+    public long getByte(String name) {
+        return getByte(names.get(name));
+    }
+
+    public java.sql.Date getDate(int i) throws SQLException {
+        return Utils.parseDate(entries.get(i));
+    }
+
+    public java.sql.Date getDate(String name) throws SQLException {
+        return getDate(names.get(name));
     }
 
     public float getFloat(int i) {
@@ -190,6 +209,14 @@ public class MetadataRow {
         return null;
     }
 
+    public Timestamp getTimestamp(int i) throws SQLException {
+        return Utils.parseTimestamp(entries.get(i));
+    }
+
+    public Timestamp getTimestamp(String name) throws SQLException {
+        return getTimestamp(names.get(name));
+    }
+
     public UUID getUUID(int i) {
 
         return null;
@@ -208,6 +235,22 @@ public class MetadataRow {
     public InetAddress getInet(String name) {
 
         return null;
+    }
+
+    public Time getTime(int i) throws SQLException {
+        return Utils.parseTime(entries.get(i));
+    }
+
+    public Time getTime(String name) throws SQLException {
+        return getTime(names.get(name));
+    }
+
+    public String getDuration(int i) {
+        return null;
+    }
+
+    public String getDuration(String name) {
+        return getDuration(names.get(name));
     }
 
     public <T> List<T> getList(int i, Class<T> elementsClass) {
@@ -247,5 +290,4 @@ public class MetadataRow {
         }
         return "[" + builder.toString() + "]";
     }
-
 }

@@ -14,26 +14,26 @@
  */
 package com.github.adejanovski.cassandra.jdbc;
 
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.sql.Types;
 
-public class JdbcInteger extends AbstractJdbcType<BigInteger> {
-    public static final JdbcInteger instance = new JdbcInteger();
+public class JdbcInt extends AbstractJdbcType<Integer> {
+    public static final JdbcInt instance = new JdbcInt();
 
-    JdbcInteger() {
+    JdbcInt() {
     }
 
     public boolean isCaseSensitive() {
         return false;
     }
 
-    public int getScale(BigInteger obj) {
+    public int getScale(Integer obj) {
         return 0;
     }
 
-    public int getPrecision(BigInteger obj) {
-        return obj.toString().length();
+    public int getPrecision(Integer obj) {
+        // max size is -2147483648
+        return (obj == null) ? 11 : obj.toString().length();
     }
 
     public boolean isCurrency() {
@@ -44,27 +44,38 @@ public class JdbcInteger extends AbstractJdbcType<BigInteger> {
         return true;
     }
 
-    public String toString(BigInteger obj) {
-        return obj.toString();
+    public String toString(Integer obj) {
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
         return false;
     }
 
-    public Class<BigInteger> getType() {
-        return BigInteger.class;
+    public String getString(ByteBuffer bytes) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 4) {
+            throw new MarshalException(
+                    "An integer is exactly 4 bytes: " + bytes.remaining());
+        }
+
+        return toString(compose(bytes));
+    }
+
+    public Class<Integer> getType() {
+        return Integer.class;
     }
 
     public int getJdbcType() {
-        return Types.BIGINT;
+        return Types.INTEGER;
     }
 
-    public BigInteger compose(Object obj) {
-        return (BigInteger) obj;
+    public Integer compose(Object value) {
+        return (Integer) value;
     }
 
-    public Object decompose(BigInteger value) {
-        return (Object) value;
+    public Object decompose(Integer value) {
+        return value;
     }
 }

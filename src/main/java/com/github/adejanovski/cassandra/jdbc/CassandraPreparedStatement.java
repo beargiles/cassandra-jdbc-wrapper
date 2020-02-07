@@ -34,7 +34,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.RowId;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLNonTransientException;
 import java.sql.SQLRecoverableException;
 import java.sql.SQLTransientException;
@@ -54,12 +53,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.Duration;
 import com.datastax.driver.core.LocalDate;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.exceptions.CodecNotFoundException;
-import com.datastax.driver.core.exceptions.InvalidTypeException;
 import com.google.common.collect.Lists;
-import com.google.common.io.CharSource;
 import com.google.common.io.CharStreams;
 
 class CassandraPreparedStatement extends CassandraStatement implements PreparedStatement {
@@ -261,8 +259,8 @@ class CassandraPreparedStatement extends CassandraStatement implements PreparedS
     public void setByte(int parameterIndex, byte b) throws SQLException {
         checkNotClosed();
         checkIndex(parameterIndex);
-        // bindValues.put(parameterIndex, JdbcInteger.instance.decompose(BigInteger.valueOf(b)));
-        // this.statement.setBytes(parameterIndex, ByteBuffer.);
+        bindValues.put(parameterIndex, JdbcByte.instance.decompose(b));
+        this.statement.setByte(parameterIndex, b);
     }
 
     public void setBytes(int parameterIndex, byte[] bytes) throws SQLException {
@@ -277,9 +275,9 @@ class CassandraPreparedStatement extends CassandraStatement implements PreparedS
         checkIndex(parameterIndex);
         // date type data is handled as an 8 byte Long value of milliseconds since the epoch
         // (handled in decompose() )
-        // bindValues.put(parameterIndex, value == null ? null :
-        // JdbcDate.instance.decompose(value));
-        this.statement.setTimestamp(parameterIndex - 1, value);
+        LocalDate date = LocalDate.fromMillisSinceEpoch(value.getTime());
+        bindValues.put(parameterIndex, value == null ? null : JdbcDate.instance.decompose(value));
+        this.statement.setDate(parameterIndex - 1, date);
     }
 
     public void setDate(int parameterIndex, Date date, Calendar cal) throws SQLException {
@@ -292,6 +290,13 @@ class CassandraPreparedStatement extends CassandraStatement implements PreparedS
         checkIndex(parameterIndex);
         // bindValues.put(parameterIndex, JdbcDouble.instance.decompose(decimal));
         this.statement.setDouble(parameterIndex - 1, decimal);
+    }
+
+    public void setDuration(int parameterIndex, Duration duration) throws SQLException {
+        // FIXME
+        checkNotClosed();
+        checkIndex(parameterIndex);
+        // this.statement.setDuration(parameterIndex-1, null);
     }
 
     public void setFloat(int parameterIndex, float decimal) throws SQLException {
@@ -353,8 +358,8 @@ class CassandraPreparedStatement extends CassandraStatement implements PreparedS
             targetType = Types.VARCHAR;
         } else if (object.getClass().equals(java.lang.Boolean.class)) {
             targetType = Types.BOOLEAN;
-        } else if (object.getClass().equals(java.math.BigDecimal.class)) {
-            targetType = Types.DECIMAL;
+        } else if (object.getClass().equals(java.sql.Date.class)) {
+            targetType = Types.DATE;
         } else if (object.getClass().equals(java.lang.Double.class)) {
             targetType = Types.DOUBLE;
         } else if (object.getClass().equals(java.lang.Float.class)) {
@@ -363,10 +368,14 @@ class CassandraPreparedStatement extends CassandraStatement implements PreparedS
             targetType = Types.OTHER;
         } else if (object.getClass().equals(java.lang.Integer.class)) {
             targetType = Types.INTEGER;
-        } else if (object.getClass().equals(java.lang.String.class)) {
-            targetType = Types.VARCHAR;
+        } else if (object.getClass().equals(java.sql.Time.class)) {
+            targetType = Types.TIME;
         } else if (object.getClass().equals(java.sql.Timestamp.class)) {
             targetType = Types.TIMESTAMP;
+        } else if (object.getClass().equals(java.lang.Byte.class)) {
+            targetType = Types.TINYINT;
+        } else if (object.getClass().equals(java.lang.String.class)) {
+            targetType = Types.VARCHAR;
         } else if (object.getClass().equals(java.util.UUID.class)) {
             targetType = Types.ROWID;
         } else {
@@ -411,8 +420,9 @@ class CassandraPreparedStatement extends CassandraStatement implements PreparedS
             case Types.CLOB:
                 this.statement.setString(parameterIndex - 1, object.toString());
                 break;
-            case Types.TIMESTAMP:
-                this.statement.setTimestamp(parameterIndex - 1, (Timestamp) object);
+            case Types.DATE:
+                LocalDate date = LocalDate.fromMillisSinceEpoch(((java.sql.Date) object).getTime());
+                this.statement.setDate(parameterIndex - 1, date);
                 break;
             case Types.DECIMAL:
                 this.statement.setDecimal(parameterIndex - 1, (BigDecimal) object);
@@ -433,8 +443,20 @@ class CassandraPreparedStatement extends CassandraStatement implements PreparedS
                     }
                 }
                 break;
-            case Types.DATE:
-                this.statement.setTimestamp(parameterIndex - 1, (Date) object);
+            case Types.SMALLINT:
+                this.statement.setShort(parameterIndex - 1, (Short) object);
+                break;
+            case Types.TIME:
+                // LocalTime time = LocalTime.ofNanoOfDay(((java.sql.Time) object).getTime());
+                // FIXME
+                long nsec = 0;
+                this.statement.setTime(parameterIndex - 1, nsec);
+                break;
+            case Types.TIMESTAMP:
+                this.statement.setTimestamp(parameterIndex - 1, (Timestamp) object);
+                break;
+            case Types.TINYINT:
+                this.statement.setByte(parameterIndex - 1, (Byte) object);
                 break;
             case Types.ROWID:
                 this.statement.setUUID(parameterIndex - 1, (java.util.UUID) object);
@@ -475,6 +497,7 @@ class CassandraPreparedStatement extends CassandraStatement implements PreparedS
     public void setShort(int parameterIndex, short smallint) throws SQLException {
         checkNotClosed();
         checkIndex(parameterIndex);
+        bindValues.put(parameterIndex, JdbcShort.instance.decompose(smallint));
         this.statement.setInt(parameterIndex - 1, smallint);
     }
 
@@ -510,8 +533,14 @@ class CassandraPreparedStatement extends CassandraStatement implements PreparedS
         checkNotClosed();
         checkIndex(parameterIndex);
         // time type data is handled as an 8 byte Long value of milliseconds since the epoch
-        bindValues.put(parameterIndex,
-                value == null ? null : JdbcLong.instance.decompose(Long.valueOf(value.getTime())));
+        if (value == null) {
+            bindValues.put(parameterIndex, null);
+            this.statement.setTime(parameterIndex - 1, 0L);
+        } else {
+            Long millis = (Long) JdbcLong.instance.decompose(Long.valueOf(value.getTime()));
+            bindValues.put(parameterIndex, millis);
+            this.statement.setTime(parameterIndex - 1, millis);
+        }
     }
 
     public void setTime(int parameterIndex, Time value, Calendar cal) throws SQLException {

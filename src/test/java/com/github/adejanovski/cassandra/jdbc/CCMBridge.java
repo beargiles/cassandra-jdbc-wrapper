@@ -29,7 +29,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Collection;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -44,7 +44,6 @@ import com.datastax.driver.core.exceptions.AlreadyExistsException;
 import com.datastax.driver.core.exceptions.DriverException;
 import com.datastax.driver.core.exceptions.NoHostAvailableException;
 import com.google.common.base.Joiner;
-import com.google.common.io.Files;
 
 public class CCMBridge {
 
@@ -75,6 +74,7 @@ public class CCMBridge {
     }
 
     private final Runtime runtime = Runtime.getRuntime();
+    @SuppressWarnings("unused")
     private final File ccmDir;
 
     private CCMBridge() {
@@ -253,6 +253,7 @@ public class CCMBridge {
             }
 
             Process p = runtime.exec(fullCommand, null, CASSANDRA_DIR);
+            @SuppressWarnings("unused")
             int retValue = p.waitFor();
 
             BufferedReader outReaderOutput = new BufferedReader(
@@ -371,7 +372,7 @@ public class CCMBridge {
                 session = cluster.connect();
             } catch (NoHostAvailableException e) {
                 erroredOut = true;
-                for (Map.Entry<InetSocketAddress, Throwable> entry : e.getErrors().entrySet())
+                for (Entry<InetSocketAddress, Throwable> entry : e.getErrors().entrySet())
                     logger.info("Error connecting to " + entry.getKey() + ": " + entry.getValue());
                 throw new RuntimeException(e);
             }
@@ -475,7 +476,7 @@ public class CCMBridge {
                 this.cluster = builder.addContactPoints(contactPoints).build();
                 this.session = cluster.connect();
             } catch (NoHostAvailableException e) {
-                for (Map.Entry<InetSocketAddress, Throwable> entry : e.getErrors().entrySet())
+                for (Entry<InetSocketAddress, Throwable> entry : e.getErrors().entrySet())
                     logger.info("Error connecting to " + entry.getKey() + ": " + entry.getValue());
                 discard();
                 throw new RuntimeException(e);

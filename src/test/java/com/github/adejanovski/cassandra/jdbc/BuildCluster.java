@@ -1,6 +1,5 @@
 package com.github.adejanovski.cassandra.jdbc;
 
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,6 +16,7 @@ import com.datastax.driver.core.Session;
 
 public class BuildCluster {
 
+    @SuppressWarnings("unused")
     private final static Logger logger = LoggerFactory.getLogger(BuildCluster.class);
 
     public static String HOST = System.getProperty("host", ConnectionDetails.getHost());

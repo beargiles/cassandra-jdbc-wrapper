@@ -14,9 +14,6 @@
  */
 package com.github.adejanovski.cassandra.jdbc;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
 import java.sql.Types;
 
 public class JdbcOther extends AbstractJdbcType<String> {
@@ -54,8 +51,7 @@ public class JdbcOther extends AbstractJdbcType<String> {
     }
 
     public String getString(Object obj) {
-        return obj.toString();
-
+        return (obj == null) ? null : obj.toString();
     }
 
     public Class<String> getType() {
@@ -71,7 +67,6 @@ public class JdbcOther extends AbstractJdbcType<String> {
     }
 
     public Object decompose(String value) {
-        return (Object) value;
+        return value;
     }
-
 }

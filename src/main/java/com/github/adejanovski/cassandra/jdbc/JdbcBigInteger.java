@@ -14,25 +14,26 @@
  */
 package com.github.adejanovski.cassandra.jdbc;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.sql.Types;
 
-public class JdbcInt32 extends AbstractJdbcType<Integer> {
-    public static final JdbcInt32 instance = new JdbcInt32();
+public class JdbcBigInteger extends AbstractJdbcType<BigInteger> {
+    public static final JdbcBigInteger instance = new JdbcBigInteger();
 
-    JdbcInt32() {
+    JdbcBigInteger() {
     }
 
     public boolean isCaseSensitive() {
         return false;
     }
 
-    public int getScale(Integer obj) {
+    public int getScale(BigInteger obj) {
         return 0;
     }
 
-    public int getPrecision(Integer obj) {
-        return obj.toString().length();
+    public int getPrecision(BigInteger obj) {
+        return (obj == null) ? Integer.MAX_VALUE : obj.toString().length();
     }
 
     public boolean isCurrency() {
@@ -43,27 +44,35 @@ public class JdbcInt32 extends AbstractJdbcType<Integer> {
         return true;
     }
 
-    public String toString(Integer obj) {
-        return obj.toString();
+    public String toString(BigInteger obj) {
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
         return false;
     }
 
-    public Class<Integer> getType() {
-        return Integer.class;
+    public String getString(ByteBuffer bytes) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        }
+
+        return toString(compose(bytes));
+    }
+
+    public Class<BigInteger> getType() {
+        return BigInteger.class;
     }
 
     public int getJdbcType() {
-        return Types.INTEGER;
+        return Types.DECIMAL;
     }
 
-    public Integer compose(Object value) {
-        return (Integer) value;
+    public BigInteger compose(Object obj) {
+        return (BigInteger) obj;
     }
 
-    public Object decompose(Integer value) {
-        return (Object) value;
+    public Object decompose(BigInteger value) {
+        return value;
     }
 }

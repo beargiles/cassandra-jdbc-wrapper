@@ -14,7 +14,6 @@
  */
 package com.github.adejanovski.cassandra.jdbc;
 
-import java.nio.ByteBuffer;
 import java.util.UUID;
 
 public class JdbcTimeUUID extends AbstractJdbcUUID {
@@ -32,10 +31,10 @@ public class JdbcTimeUUID extends AbstractJdbcUUID {
      */
 
     public UUID compose(Object obj) {
-        return UUID.fromString(obj.toString());
+        return (obj == null) ? null : UUID.fromString(obj.toString());
     }
 
     public Object decompose(UUID value) {
-        return (Object) (value.toString());
+        return (value == null) ? null : value.toString();
     }
 }

@@ -14,13 +14,9 @@
  */
 package com.github.adejanovski.cassandra.jdbc;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
 import java.sql.Types;
 
 import com.datastax.driver.core.TupleValue;
-import com.datastax.driver.core.UDTValue;
 
 public class JdbcTuple extends AbstractJdbcType<TupleValue> {
     public static final JdbcTuple instance = new JdbcTuple();
@@ -49,8 +45,7 @@ public class JdbcTuple extends AbstractJdbcType<TupleValue> {
     }
 
     public String getString(Object obj) {
-        return obj.toString();
-
+        return (obj == null) ? null : obj.toString();
     }
 
     public Class<TupleValue> getType() {
@@ -66,7 +61,7 @@ public class JdbcTuple extends AbstractJdbcType<TupleValue> {
     }
 
     public Object decompose(TupleValue value) {
-        return (Object) value;
+        return value;
     }
 
     @Override
