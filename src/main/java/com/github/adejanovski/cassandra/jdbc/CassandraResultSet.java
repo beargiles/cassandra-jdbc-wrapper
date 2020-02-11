@@ -424,13 +424,13 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     public byte getByte(int index) throws SQLException
     {
         checkIndex(index);
-        return currentRow.getBytes(index - 1).get();
+        return (byte) currentRow.getByte(index - 1);
     }
 
     public byte getByte(String name) throws SQLException
     {
         checkName(name);
-        return currentRow.getBytes(name).get();
+        return (byte) currentRow.getByte(name);
     }
 
 

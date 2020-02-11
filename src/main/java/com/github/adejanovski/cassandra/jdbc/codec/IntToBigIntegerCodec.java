@@ -1,5 +1,6 @@
 package com.github.adejanovski.cassandra.jdbc.codec;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 import org.apache.cassandra.utils.ByteBufferUtil;
@@ -9,10 +10,10 @@ import com.datastax.driver.core.ProtocolVersion;
 import com.datastax.driver.core.TypeCodec;
 import com.datastax.driver.core.exceptions.InvalidTypeException;
 
-public class ByteToIntCodec extends TypeCodec<Integer> {
+public class IntToBigIntegerCodec extends TypeCodec<Integer> {
 
-	public ByteToIntCodec(Class<Integer> javaClass) {
-		super(DataType.smallint(), javaClass);
+	public IntToBigIntegerCodec(Class<Integer> javaClass) {
+		super(DataType.varint(), javaClass);
 	}
 
 	@Override
@@ -20,7 +21,7 @@ public class ByteToIntCodec extends TypeCodec<Integer> {
 		if (paramT == null) {
 			return null;
 		}
-		return ByteBufferUtil.bytes(paramT);
+		return ByteBufferUtil.bytes(paramT.intValue());
 	}
 
 	@Override
@@ -30,7 +31,8 @@ public class ByteToIntCodec extends TypeCodec<Integer> {
 
 		}
 		// always duplicate the ByteBuffer instance before consuming it!
-		return Integer.valueOf(paramByteBuffer.duplicate().get());
+		BigInteger varint = new BigInteger(paramByteBuffer.duplicate().array());
+		return varint.intValueExact();
 	}
 
 	@Override

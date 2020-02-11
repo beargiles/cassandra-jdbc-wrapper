@@ -374,13 +374,13 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
     public byte getByte(int index) throws SQLException
     {
         checkIndex(index);
-        return currentRow.getBytes(index - 1).get();
+        return (byte) currentRow.getByte(index - 1);
     }
 
     public byte getByte(String name) throws SQLException
     {
         checkName(name);
-        return currentRow.getBytes(name).get();
+        return (byte) currentRow.getByte(name);
     }
 
 
@@ -1054,9 +1054,10 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
 		            if (jtype instanceof JdbcBytes) length = Integer.MAX_VALUE / 2;
 		            if (jtype instanceof JdbcAscii || jtype instanceof JdbcUTF8) length = Integer.MAX_VALUE;
 		            if (jtype instanceof JdbcUUID) length = 36;
-		            if (jtype instanceof JdbcInt32) length = 4;
 		            if (jtype instanceof JdbcLong) length = 8;
+                    if (jtype instanceof JdbcInt32) length = 4;
 		            if (jtype instanceof JdbcShort) length = 2;
+                    if (jtype instanceof JdbcByte) length = 1;
 	            	// String stringValue = getObject(column).toString();
 	            	//return (stringValue == null ? -1 : stringValue.length());
 		            

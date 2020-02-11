@@ -15,10 +15,13 @@
 package com.github.adejanovski.cassandra.jdbc;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -37,16 +40,17 @@ import com.datastax.driver.core.TypeCodec;
 import com.datastax.driver.core.exceptions.DriverException;
 import com.datastax.driver.core.policies.RoundRobinPolicy;
 import com.datastax.driver.core.policies.TokenAwarePolicy;
-import com.github.adejanovski.cassandra.jdbc.codec.BigDecimalToBigintCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.ByteBufferToByteCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.ByteToByteBufferCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.ByteToIntCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.BigDecimalToLongCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.BigIntegerToIntCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.BigIntegerToLongCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.DoubleToDecimalCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.DoubleToFloatCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.IntToByteCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.IntToBigIntegerCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.IntToLongCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.IntToShortCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.LongToBigIntegerCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.LongToIntCodec;
+import com.github.adejanovski.cassandra.jdbc.codec.LongToTimestampCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.ShortToIntCodec;
 import com.github.adejanovski.cassandra.jdbc.codec.TimestampToLongCodec;
 
@@ -190,18 +194,17 @@ class SessionHolder {
         List<TypeCodec<?>> codecs = new ArrayList<TypeCodec<?>>();
         CodecRegistry customizedRegistry = new CodecRegistry();
 
-        //codecs.add(new ByteBufferToByteCodec(Byte.class));  <-- duplicates TinyIntCodec (tinyint <-> Byte)>
-        //codecs.add(new ByteToByteBufferCodec(ByteBuffer.class)); <!-- duplicates BlobCodec (blob <-> ByteBuffer)
-
-        // - codecs.add(new ByteToIntCodec(Integer.class)); <-- no impact?
-        // - codecs.add(new IntToByteCodec(Byte.class)); <-- no impact?
-
-        codecs.add(new BigDecimalToBigintCodec(BigDecimal.class));
-        codecs.add(new DoubleToDecimalCodec(Double.class));
-        codecs.add(new DoubleToFloatCodec(Double.class));
+        //codecs.add(new BigDecimalToLongCodec(BigDecimal.class));
+        codecs.add(new BigIntegerToIntCodec(BigInteger.class));
+        codecs.add(new BigIntegerToLongCodec(BigInteger.class));
+        //codecs.add(new DoubleToDecimalCodec(Double.class));
+        //codecs.add(new DoubleToFloatCodec(Double.class));
+        codecs.add(new IntToBigIntegerCodec(Integer.class));
         codecs.add(new IntToLongCodec(Long.class));
         codecs.add(new IntToShortCodec(Short.class));
+        codecs.add(new LongToBigIntegerCodec(Long.class));
         codecs.add(new LongToIntCodec(Integer.class));
+        codecs.add(new LongToTimestampCodec(Timestamp.class));
         codecs.add(new ShortToIntCodec(Integer.class));
         codecs.add(new TimestampToLongCodec(Long.class));
 

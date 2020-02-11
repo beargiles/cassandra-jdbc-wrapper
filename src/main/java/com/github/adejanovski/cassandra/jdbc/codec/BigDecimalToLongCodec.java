@@ -10,9 +10,9 @@ import com.datastax.driver.core.ProtocolVersion;
 import com.datastax.driver.core.TypeCodec;
 import com.datastax.driver.core.exceptions.InvalidTypeException;
 
-public class BigDecimalToBigintCodec extends TypeCodec<BigDecimal> {
+public class BigDecimalToLongCodec extends TypeCodec<BigDecimal> {
 
-	public BigDecimalToBigintCodec(Class<BigDecimal> javaClass) {
+	public BigDecimalToLongCodec(Class<BigDecimal> javaClass) {
 		super(DataType.bigint(), javaClass);
 	}
 
