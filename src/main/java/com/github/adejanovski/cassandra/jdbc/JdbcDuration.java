@@ -111,7 +111,7 @@ public class JdbcDuration extends AbstractJdbcType<Date>
 
     public int getJdbcType()
     {
-        return Types.TIMESTAMP;
+        return Types.OTHER;
     }
 
     public Date compose(Object value)

@@ -174,6 +174,10 @@ public  class MetadataResultSets
 		    		            if (jtype instanceof JdbcInt32) length = 4;
 		    		            if (jtype instanceof JdbcLong) length = 8;
 		    		            if (jtype instanceof JdbcShort) length = 2;
+                                if (jtype instanceof JdbcByte) length = 1;
+                                if (jtype instanceof JdbcDate) length = 8;
+                                if (jtype instanceof JdbcTime) length = 8;
+                                if (jtype instanceof JdbcTimestamp) length = 8;
 		    					
 		    		            //NUM_PREC_RADIX
 		    		            int npr = 2;
@@ -186,8 +190,6 @@ public  class MetadataResultSets
 //									charol = Integer.MAX_VALUE;
 //								}
 		    		            
-		    		            System.out.println("Type : " + column.getType().toString());
-		    		            System.out.println("Name : " + column.getName());
 		    		            int jdbcType=Types.OTHER;
 		    		            try{
 		    		            	jdbcType=TypesMap.getTypeForComparator(column.getType().toString()).getJdbcType();

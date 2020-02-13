@@ -440,6 +440,22 @@ public class Utils
 					zeSet.add(UUID.fromString(val.trim()));        				
 			}        		
 			return zeSet;
+        }else if(itemType.equals("smallint")){
+            LinkedHashSet<Short> zeSet = Sets.newLinkedHashSet();
+            String[] values = value.replace("[", "").replace("]", "").split(", ");
+            
+            for(String val:values){                     
+                    zeSet.add(Short.parseShort(val.trim()));                        
+            }               
+            return zeSet;
+        }else if(itemType.equals("tinyint")){
+            LinkedHashSet<Byte> zeSet = Sets.newLinkedHashSet();
+            String[] values = value.replace("[", "").replace("]", "").split(", ");
+            
+            for(String val:values){                     
+                    zeSet.add(Byte.parseByte(val.trim()));                        
+            }               
+            return zeSet;
 		}
     	return null;
     	
@@ -533,7 +549,23 @@ public class Utils
 				zeList.add(UUID.fromString(val.trim()));        				
 			}        		
 			return zeList;
-		}
+        }else if(itemType.equals("smallint")){
+            ArrayList<Short> zeList = Lists.newArrayList();
+            String[] values = value.replace("[", "").replace("]", "").split(", ");
+            
+            for(String val:values){                     
+                zeList.add(Short.parseShort(val.trim()));                       
+            }               
+            return zeList;
+        }else if(itemType.equals("tinyint")){
+            ArrayList<Byte> zeList = Lists.newArrayList();
+            String[] values = value.replace("[", "").replace("]", "").split(", ");
+            
+            for(String val:values){                     
+                zeList.add(Byte.parseByte(val.trim()));                       
+            }               
+            return zeList;
+		} // FIXME - Date, Time, Duration, Timestamp
     	return null;
     	
     }
@@ -568,9 +600,13 @@ public class Utils
 				keys.add(UUID.fromString(keyVal[0]));				
 			}else if(kType.equals("timeuuid")){
 				keys.add(UUID.fromString(keyVal[0]));
+            }else if(kType.equals("smallint")){
+                keys.add(Short.parseShort(keyVal[0]));              
+            }else if(kType.equals("tinyint")){
+                keys.add(Byte.parseByte(keyVal[0]));              
 			}else{
 				keys.add(keyVal[0]);
-			}
+			} // FIXME: Date, Time, Duration, Timestamp
     		
     		if(vType.equals("bigint")){
     			vals.add(Long.parseLong(keyVal[1]));
@@ -590,9 +626,13 @@ public class Utils
 				vals.add(UUID.fromString(keyVal[1]));				
 			}else if(vType.equals("timeuuid")){
 				vals.add(UUID.fromString(keyVal[1]));
+            }else if(kType.equals("smallint")){
+                vals.add(Short.parseShort(keyVal[0]));              
+            }else if(kType.equals("tinyint")){
+                vals.add(Byte.parseByte(keyVal[0]));              
 			}else{
 				vals.add(keyVal[1]);
-			}
+			} // FIXME: Date, Time, Duration, Timestamp
     		
     		zeMap.put(keys.get(keys.size()-1), vals.get(vals.size()-1));
     		

@@ -15,16 +15,16 @@
 package com.github.adejanovski.cassandra.jdbc;
 
 import java.nio.ByteBuffer;
+import java.sql.Time;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
-public class JdbcDate extends AbstractJdbcType<Date>
+public class JdbcTime extends AbstractJdbcType<Time>
 {
     public static final String[] iso8601Patterns = new String[] {
-        "yyyy-MM-dd",
-        "yyyyMMdd"
+        "HH:mm:ss",
+        "HHmmss"
     };
     static final String DEFAULT_FORMAT = iso8601Patterns[0];
     static final ThreadLocal<SimpleDateFormat> FORMATTER = new ThreadLocal<SimpleDateFormat>()
@@ -35,21 +35,21 @@ public class JdbcDate extends AbstractJdbcType<Date>
         }
     };
 
-    public static final JdbcDate instance = new JdbcDate();
+    public static final JdbcTime instance = new JdbcTime();
 
-    JdbcDate() {}
+    JdbcTime() {}
 
     public boolean isCaseSensitive()
     {
         return false;
     }
 
-    public int getScale(Date obj)
+    public int getScale(Time obj)
     {
         return -1;
     }
 
-    public int getPrecision(Date obj)
+    public int getPrecision(Time obj)
     {
         return -1;
     }
@@ -64,7 +64,7 @@ public class JdbcDate extends AbstractJdbcType<Date>
         return false;
     }
 
-    public String toString(Date obj)
+    public String toString(Time obj)
     {
         return FORMATTER.get().format(obj);
     }
@@ -82,29 +82,29 @@ public class JdbcDate extends AbstractJdbcType<Date>
         }
         if (bytes.remaining() != 8)
         {
-            throw new MarshalException("A date is exactly 8 bytes (stored as an long): " + bytes.remaining());
+            throw new MarshalException("A time is exactly 8 bytes (stored as an long): " + bytes.remaining());
         }
 
         // uses ISO-8601 formatted string
-        return FORMATTER.get().format(new Date(bytes.getLong(bytes.position())));
+        return FORMATTER.get().format(new Time(bytes.getLong(bytes.position())));
     }
 
-    public Class<Date> getType()
+    public Class<Time> getType()
     {
-        return Date.class;
+        return Time.class;
     }
 
     public int getJdbcType()
     {
-        return Types.DATE;
+        return Types.TIME;
     }
 
-    public Date compose(Object value)
+    public Time compose(Object value)
     {
-        return (Date)value;
+        return (Time)value;
     }
 
-    public Object decompose(Date value)
+    public Object decompose(Time value)
     {
       return (value==null) ? null
                            : (Object)value;

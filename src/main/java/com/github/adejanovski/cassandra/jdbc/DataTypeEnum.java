@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,34 +21,40 @@ import com.google.common.collect.Maps;
 
 public enum DataTypeEnum {
 
+        CUSTOM    (0,  ByteBuffer.class, DataType.Name.CUSTOM),
         ASCII     (1,  String.class, DataType.Name.ASCII),
         BIGINT    (2,  Long.class, DataType.Name.BIGINT),
         BLOB      (3,  ByteBuffer.class, DataType.Name.BLOB),
         BOOLEAN   (4,  Boolean.class, DataType.Name.BOOLEAN),
         COUNTER   (5,  Long.class, DataType.Name.COUNTER),
-        DATE      (17, Date.class, DataType.Name.DATE),
         DECIMAL   (6,  BigDecimal.class, DataType.Name.DECIMAL),
         DOUBLE    (7,  Double.class, DataType.Name.DOUBLE),
-        DURATION  (21, Duration.class, DataType.Name.DURATION),
         FLOAT     (8,  Float.class, DataType.Name.FLOAT),
-        INET      (16, InetAddress.class, DataType.Name.INET),
         INT       (9,  Integer.class, DataType.Name.INT),
-        SMALLINT  (19, Short.class, DataType.Name.SMALLINT),
         TEXT      (10, String.class, DataType.Name.TEXT),
-        TIME      (18, Date.class, DataType.Name.TIME),
         TIMESTAMP (11, Date.class, DataType.Name.TIMESTAMP),
-        TIMEUUID  (15, UUID.class, DataType.Name.TIMEUUID),
-        TINYINT   (20, Byte.class, DataType.Name.TINYINT),
         UUID      (12, UUID.class, DataType.Name.UUID),
         VARCHAR   (13, String.class, DataType.Name.VARCHAR),
         VARINT    (14, BigInteger.class, DataType.Name.VARINT),
+        TIMEUUID  (15, UUID.class, DataType.Name.TIMEUUID),
+        INET      (16, InetAddress.class, DataType.Name.INET),
 
         LIST      (32, List.class, DataType.Name.LIST),
         SET       (34, Set.class, DataType.Name.SET),
         MAP       (33, Map.class, DataType.Name.MAP),
+
+        // API version 3
         UDT       (48, UDTValue.class, DataType.Name.UDT),
         TUPLE     (49, TupleValue.class, DataType.Name.TUPLE),
-        CUSTOM    (0,  ByteBuffer.class, DataType.Name.CUSTOM);
+
+        // API version 4
+        DATE      (17, Date.class, DataType.Name.DATE),
+        TIME      (18, Time.class, DataType.Name.TIME),
+        SMALLINT  (19, Short.class, DataType.Name.SMALLINT),
+        TINYINT   (20, Byte.class, DataType.Name.TINYINT),
+
+        // API version 5
+        DURATION  (21, Duration.class, DataType.Name.DURATION);
 
         final int protocolId;
         final Class<?> javaType;
@@ -59,7 +66,7 @@ public enum DataTypeEnum {
         static {
 
         	cqlDataTypeToDataType = Maps.newHashMap();
-	
+
             int maxCode = -1;
             for (DataTypeEnum name : DataTypeEnum.values())
                 maxCode = Math.max(maxCode, name.protocolId);
@@ -120,22 +127,27 @@ public enum DataTypeEnum {
          *   <tr><td>BOOLEAN       </td><td>Boolean</td></tr>
          *   <tr><td>COUNTER       </td><td>Long</td></tr>
          *   <tr><td>CUSTOM        </td><td>ByteBuffer</td></tr>
+         *   <tr><td>DATE          </td><td>java.sql.Date</td></tr>
          *   <tr><td>DECIMAL       </td><td>BigDecimal</td></tr>
          *   <tr><td>DOUBLE        </td><td>Double</td></tr>
+         *   <tr><td>DURATION      </td><td>com.datastax.driver.core.Duration</td></tr>
          *   <tr><td>FLOAT         </td><td>Float</td></tr>
          *   <tr><td>INET          </td><td>InetAddress</td></tr>
          *   <tr><td>INT           </td><td>Integer</td></tr>
          *   <tr><td>LIST          </td><td>List</td></tr>
          *   <tr><td>MAP           </td><td>Map</td></tr>
          *   <tr><td>SET           </td><td>Set</td></tr>
+         *   <tr><td>SMALLINT      </td><td>Short</td></tr>
          *   <tr><td>TEXT          </td><td>String</td></tr>
+         *   <tr><td>TIME          </td><td>java.sql.Time</td></tr>
          *   <tr><td>TIMESTAMP     </td><td>Date</td></tr>
-         *   <tr><td>UUID          </td><td>UUID</td></tr>
-         *   <tr><td>UDT           </td><td>UDTValue</td></tr>
+         *   <tr><td>TIMEUUID      </td><td>UUID</td></tr>
+         *   <tr><td>TINYINT       </td><td>Byte</td></tr>
          *   <tr><td>TUPLE         </td><td>TupleValue</td></tr>
+         *   <tr><td>UDT           </td><td>UDTValue</td></tr>
+         *   <tr><td>UUID          </td><td>UUID</td></tr>
          *   <tr><td>VARCHAR       </td><td>String</td></tr>
          *   <tr><td>VARINT        </td><td>BigInteger</td></tr>
-         *   <tr><td>TIMEUUID      </td><td>UUID</td></tr>
          *   <--------------------------------------------------------------------
          * </table>
          *
@@ -150,6 +162,4 @@ public enum DataTypeEnum {
             return super.toString().toLowerCase();
         }
    }
-
-
 

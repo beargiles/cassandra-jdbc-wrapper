@@ -18,21 +18,17 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
-import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
-
-
-
-
-
-
 
 import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.TupleValue;
@@ -63,9 +59,7 @@ public class MetadataRow{
 		definitions.add(new Definition("","",key,DataType.text()));
 		return this;
 	}
-	
-	
-	
+
 	public UDTValue getUDTValue(int i) {
 		return null;
 	}
@@ -153,14 +147,19 @@ public class MetadataRow{
     }
 
  
-	public Date getDate(int i) {
-		return null;
+	public java.sql.Date getDate(int i) {
+	    DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+	    try {
+	        return new java.sql.Date(FORMATTER.parse(entries.get(i)).getTime());
+	    } catch (ParseException e) {
+	        // FIXME - what should this do?
+	        return new java.sql.Date(0);
+	    }
 	}
 
  
-	public Date getDate(String name) {
-
-		return null;
+	public java.sql.Date getDate(String name) {
+        return getDate(names.get(name));
 	}
 
  
@@ -248,6 +247,18 @@ public class MetadataRow{
 		return null;
 	}
 
+	public Timestamp getTimestamp(int i) {
+        DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return new java.sql.Timestamp(FORMATTER.parse(entries.get(i)).getTime());
+        } catch (ParseException e) {
+            return null;
+        }
+	}
+ 
+    public Timestamp getTimestamp(String name) {
+        return getTimestamp(names.get(name));
+    }
  
 	public UUID getUUID(int i) {
 
@@ -257,7 +268,7 @@ public class MetadataRow{
  
 	public UUID getUUID(String name) {
 
-		return null;
+	    return null;
 	}
 
  
@@ -272,6 +283,21 @@ public class MetadataRow{
 		return null;
 	}
 
+	public Time getTime(int i) {
+	    return null;
+	}
+
+    public Time getTime(String name) {
+        return getTime(names.get(name));
+    }
+
+	public String getDuration(int i) {
+	    return null;
+	}
+
+    public String getDuration(String name) {
+        return getDuration(names.get(name));
+    }
  
 	public <T> List<T> getList(int i, Class<T> elementsClass) {
 

@@ -35,6 +35,7 @@ import com.datastax.driver.core.ColumnDefinitions;
 import com.datastax.driver.core.ColumnDefinitions.Definition;
 import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.DataType.Name;
+import com.datastax.driver.core.LocalDate;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.UDTValue;
 import com.datastax.driver.core.exceptions.InvalidTypeException;
@@ -424,13 +425,13 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     public byte getByte(int index) throws SQLException
     {
         checkIndex(index);
-        return (byte) currentRow.getByte(index - 1);
+        return currentRow.getByte(index - 1);
     }
 
     public byte getByte(String name) throws SQLException
     {
         checkName(name);
-        return (byte) currentRow.getByte(name);
+        return currentRow.getByte(name);
     }
 
 
@@ -468,10 +469,8 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     public Date getDate(int index) throws SQLException
     {
         checkIndex(index);
-        if(currentRow.getDate(index - 1)==null){
-        	return null;
-        }
-		return new java.sql.Date(currentRow.getTimestamp(index - 1).getTime());
+        LocalDate date = currentRow.getDate(index - 1);
+        return new Date(date.getMillisSinceEpoch());
     }
 
     public Date getDate(int index, Calendar calendar) throws SQLException
@@ -484,10 +483,8 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     public Date getDate(String name) throws SQLException
     {
         checkName(name);
-        if(currentRow.getDate(name)==null){
-        	return null;
-        }
-		return new java.sql.Date(currentRow.getTimestamp(name).getTime());
+        LocalDate date = currentRow.getDate(name);
+        return new Date(date.getMillisSinceEpoch());
     }
 
     public Date getDate(String name, Calendar calendar) throws SQLException
@@ -740,6 +737,8 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     			return (Object) currentRow.getBool(index-1);
     		}else if (typeName.equals("counter")){
     			return (Object) currentRow.getLong(index-1);
+            }else if (typeName.equals("date")){
+                return (Object) currentRow.getDate(index-1);
     		}else if (typeName.equals("decimal")){
     			return (Object) currentRow.getDecimal(index-1);
     		}else if (typeName.equals("double")){
@@ -752,6 +751,8 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     			return (Object) currentRow.getInt(index-1);
     		}else if (typeName.equals("text")){
     			return (Object) currentRow.getString(index-1);
+            }else if (typeName.equals("time")){
+                return (Object) currentRow.getTime(index-1);
     		}else if (typeName.equals("timestamp")){
     	        return (Object) new Timestamp((currentRow.getTimestamp(index-1)).getTime());
     		}else if (typeName.equals("uuid")){
@@ -842,30 +843,37 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     			return (Object) currentRow.getBool(name);
     		}else if (typeName.equals("counter")){
     			return (Object) currentRow.getLong(name);
+            }else if (typeName.equals("date")){
+                return (Object) currentRow.getDate(name);
     		}else if (typeName.equals("decimal")){        			
     			return (Object) currentRow.getDecimal(name);
     		}else if (typeName.equals("double")){
     			return (Object) currentRow.getDouble(name);
+    		}else if (typeName.equals("duration")) {
+    		    // FIXME
+    		    return null;
     		}else if (typeName.equals("float")){
     			return (Object) currentRow.getFloat(name);
     		}else if (typeName.equals("inet")){
     			return (Object) currentRow.getInet(name);
     		}else if (typeName.equals("int")){
     			return (Object) currentRow.getInt(name);
+            }else if (typeName.equals("smallint")){
+                return (Object) currentRow.getShort(name);
     		}else if (typeName.equals("text")){
     			return (Object) currentRow.getString(name);
+            }else if (typeName.equals("time")){
+                return (Object) currentRow.getTime(name);
     		}else if (typeName.equals("timestamp")){        			
     	        return (Object) new Timestamp((currentRow.getTimestamp(name)).getTime());
+            }else if (typeName.equals("timeuuid")){
+                return (Object) currentRow.getUUID(name);
+            }else if (typeName.equals("tinyint")){
+                return (Object) currentRow.getByte(name);
     		}else if (typeName.equals("uuid")){
-    			return (Object) currentRow.getUUID(name);
-    		}else if (typeName.equals("timeuuid")){
     			return (Object) currentRow.getUUID(name);
     		}else if (typeName.equals("varint")){
     	        return (Object) currentRow.getInt(name);
-            }else if (typeName.equals("smallint")){
-                return (Object) currentRow.getShort(name);
-            }else if (typeName.equals("tinyint")){
-                return (Object) currentRow.getByte(name);
     		}
         	
         }
@@ -883,12 +891,6 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     }
 
    
-
-    public short getShort(int index) throws SQLException
-    {
-        checkIndex(index);
-        return (short) currentRow.getInt(index - 1);
-    }
 
     public Set<?> getSet(int index) throws SQLException
     {
@@ -912,11 +914,16 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
         return null;
     }
 
+    public short getShort(int index) throws SQLException
+    {
+        checkIndex(index);
+        return currentRow.getShort(index - 1);
+    }
 
     public short getShort(String name) throws SQLException
     {
         checkName(name);
-        return (short) currentRow.getInt(name);
+        return currentRow.getShort(name);
     }
 
 
@@ -956,10 +963,8 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     public Time getTime(int index) throws SQLException
     {
         checkIndex(index);
-        java.util.Date date = currentRow.getTimestamp(index-1);
-        if(date==null)
-        	return null;
-        return new Time(currentRow.getTimestamp(index - 1).getTime());
+        long time = currentRow.getTime(index - 1);
+        return new Time(time / 1_000_000L);
     }
 
     public Time getTime(int index, Calendar calendar) throws SQLException
@@ -975,10 +980,8 @@ class CassandraResultSet extends AbstractResultSet implements CassandraResultSet
     public Time getTime(String name) throws SQLException
     {
         checkName(name);
-        java.util.Date date = currentRow.getTimestamp(name);
-        if(date==null)
-        	return null;
-        return new Time(currentRow.getTimestamp(name).getTime());
+        long time = currentRow.getTime(name);
+        return new Time(time / 1_000_000L);
     }
 
     public Time getTime(String name, Calendar calendar) throws SQLException
