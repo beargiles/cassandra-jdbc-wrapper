@@ -12,36 +12,38 @@ import com.datastax.driver.core.exceptions.InvalidTypeException;
 
 public class BigIntegerToLongCodec extends TypeCodec<BigInteger> {
 
-	public BigIntegerToLongCodec(Class<BigInteger> javaClass) {
-		super(DataType.bigint(), javaClass);
-	}
+    public BigIntegerToLongCodec(Class<BigInteger> javaClass) {
+        super(DataType.bigint(), javaClass);
+    }
 
-	@Override
-	public ByteBuffer serialize(BigInteger paramT, ProtocolVersion paramProtocolVersion) throws InvalidTypeException {
-		if (paramT == null) {
-			return null;
-		}
-		return ByteBuffer.wrap(paramT.toByteArray());
-	}
+    @Override
+    public ByteBuffer serialize(BigInteger paramT, ProtocolVersion paramProtocolVersion)
+            throws InvalidTypeException {
+        if (paramT == null) {
+            return null;
+        }
+        return ByteBuffer.wrap(paramT.toByteArray());
+    }
 
-	@Override
-	public BigInteger deserialize(ByteBuffer paramByteBuffer, ProtocolVersion paramProtocolVersion) throws InvalidTypeException {
-		if (paramByteBuffer == null) {
-			return null;
+    @Override
+    public BigInteger deserialize(ByteBuffer paramByteBuffer, ProtocolVersion paramProtocolVersion)
+            throws InvalidTypeException {
+        if (paramByteBuffer == null) {
+            return null;
 
-		}
-		// always duplicate the ByteBuffer instance before consuming it!
-		return new BigInteger(ByteBufferUtil.getArray(paramByteBuffer.duplicate()));
-	}
+        }
+        // always duplicate the ByteBuffer instance before consuming it!
+        return new BigInteger(ByteBufferUtil.getArray(paramByteBuffer.duplicate()));
+    }
 
-	@Override
-	public BigInteger parse(String paramString) throws InvalidTypeException {
-		return new BigInteger(paramString);
-	}
+    @Override
+    public BigInteger parse(String paramString) throws InvalidTypeException {
+        return new BigInteger(paramString);
+    }
 
-	@Override
-	public String format(BigInteger paramT) throws InvalidTypeException {
-		return String.valueOf(paramT);
-	}
+    @Override
+    public String format(BigInteger paramT) throws InvalidTypeException {
+        return String.valueOf(paramT);
+    }
 
 }

@@ -16,66 +16,53 @@ package com.github.adejanovski.cassandra.jdbc;
 
 import java.sql.Types;
 
-
-
-public class JdbcShort extends AbstractJdbcType<Short>
-{
+public class JdbcShort extends AbstractJdbcType<Short> {
     public static final JdbcShort instance = new JdbcShort();
 
-    JdbcShort() {}
+    JdbcShort() {
+    }
 
-    public boolean isCaseSensitive()
-    {
+    public boolean isCaseSensitive() {
         return false;
     }
 
-    public int getScale(Short obj)
-    {
+    public int getScale(Short obj) {
         return 0;
     }
 
-    public int getPrecision(Short obj)
-    {
+    public int getPrecision(Short obj) {
         return obj.toString().length();
     }
 
-    public boolean isCurrency()
-    {
+    public boolean isCurrency() {
         return false;
     }
 
-    public boolean isSigned()
-    {
+    public boolean isSigned() {
         return true;
     }
 
-    public String toString(Short obj)
-    {
+    public String toString(Short obj) {
         return obj.toString();
     }
 
-    public boolean needsQuotes()
-    {
+    public boolean needsQuotes() {
         return false;
     }
 
-    public Class<Short> getType()
-    {
+    public Class<Short> getType() {
         return Short.class;
     }
 
-    public int getJdbcType()
-    {
+    public int getJdbcType() {
         return Types.SMALLINT;
     }
 
-    public Short compose(Object obj)
-    {
-        return (Short)obj;
+    public Short compose(Object obj) {
+        return (Short) obj;
     }
 
-    public Object decompose(Short value)
-    {
-        return (Object)value;
+    public Object decompose(Short value) {
+        return (Object) value;
     }
 }

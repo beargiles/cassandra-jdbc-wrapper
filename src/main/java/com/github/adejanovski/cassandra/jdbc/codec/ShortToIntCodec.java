@@ -11,37 +11,39 @@ import com.datastax.driver.core.exceptions.InvalidTypeException;
 
 public class ShortToIntCodec extends TypeCodec<Integer> {
 
-	public ShortToIntCodec(Class<Integer> javaClass) {
-		super(DataType.smallint(), javaClass);
-	}
+    public ShortToIntCodec(Class<Integer> javaClass) {
+        super(DataType.smallint(), javaClass);
+    }
 
-	@Override
-	public ByteBuffer serialize(Integer paramT, ProtocolVersion paramProtocolVersion) throws InvalidTypeException {
-		if (paramT == null) {
-			return null;
-		}
-		return ByteBufferUtil.bytes(paramT);
-	}
+    @Override
+    public ByteBuffer serialize(Integer paramT, ProtocolVersion paramProtocolVersion)
+            throws InvalidTypeException {
+        if (paramT == null) {
+            return null;
+        }
+        return ByteBufferUtil.bytes(paramT);
+    }
 
-	@Override
-	public Integer deserialize(ByteBuffer paramByteBuffer, ProtocolVersion paramProtocolVersion) throws InvalidTypeException {
-		if (paramByteBuffer == null) {
-			return null;
+    @Override
+    public Integer deserialize(ByteBuffer paramByteBuffer, ProtocolVersion paramProtocolVersion)
+            throws InvalidTypeException {
+        if (paramByteBuffer == null) {
+            return null;
 
-		}
-		// always duplicate the ByteBuffer instance before consuming it!
-		Short value = ByteBufferUtil.toShort(paramByteBuffer.duplicate());
-		return value.intValue();
-	}
+        }
+        // always duplicate the ByteBuffer instance before consuming it!
+        Short value = ByteBufferUtil.toShort(paramByteBuffer.duplicate());
+        return value.intValue();
+    }
 
-	@Override
-	public Integer parse(String paramString) throws InvalidTypeException {
-		return Integer.valueOf(paramString);
-	}
+    @Override
+    public Integer parse(String paramString) throws InvalidTypeException {
+        return Integer.valueOf(paramString);
+    }
 
-	@Override
-	public String format(Integer paramT) throws InvalidTypeException {
-		return String.valueOf(paramT);
-	}
+    @Override
+    public String format(Integer paramT) throws InvalidTypeException {
+        return String.valueOf(paramT);
+    }
 
 }

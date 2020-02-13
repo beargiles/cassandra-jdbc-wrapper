@@ -16,66 +16,53 @@ package com.github.adejanovski.cassandra.jdbc;
 
 import java.sql.Types;
 
-
-
-public class JdbcByte extends AbstractJdbcType<Byte>
-{
+public class JdbcByte extends AbstractJdbcType<Byte> {
     public static final JdbcByte instance = new JdbcByte();
 
-    JdbcByte() {}
+    JdbcByte() {
+    }
 
-    public boolean isCaseSensitive()
-    {
+    public boolean isCaseSensitive() {
         return false;
     }
 
-    public int getScale(Byte obj)
-    {
+    public int getScale(Byte obj) {
         return 0;
     }
 
-    public int getPrecision(Byte obj)
-    {
+    public int getPrecision(Byte obj) {
         return obj.toString().length();
     }
 
-    public boolean isCurrency()
-    {
+    public boolean isCurrency() {
         return false;
     }
 
-    public boolean isSigned()
-    {
+    public boolean isSigned() {
         return true;
     }
 
-    public String toString(Byte obj)
-    {
+    public String toString(Byte obj) {
         return obj.toString();
     }
 
-    public boolean needsQuotes()
-    {
+    public boolean needsQuotes() {
         return false;
     }
 
-    public Class<Byte> getType()
-    {
+    public Class<Byte> getType() {
         return Byte.class;
     }
 
-    public int getJdbcType()
-    {
+    public int getJdbcType() {
         return Types.TINYINT;
     }
 
-    public Byte compose(Object obj)
-    {
-        return (Byte)obj;
+    public Byte compose(Object obj) {
+        return (Byte) obj;
     }
 
-    public Object decompose(Byte value)
-    {
-        return (Object)value;
+    public Object decompose(Byte value) {
+        return (Object) value;
     }
 }
