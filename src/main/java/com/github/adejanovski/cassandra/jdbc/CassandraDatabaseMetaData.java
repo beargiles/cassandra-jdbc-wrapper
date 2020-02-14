@@ -24,6 +24,7 @@ import static com.github.adejanovski.cassandra.jdbc.Utils.NO_INTERFACE;
 class CassandraDatabaseMetaData implements DatabaseMetaData {
     private CassandraConnection connection;
     private CassandraStatement statement;
+    @SuppressWarnings("unused")
     private Metadata metadata;
 
     public CassandraDatabaseMetaData(CassandraConnection connection) throws SQLException {

@@ -14,6 +14,7 @@
  */
 package com.github.adejanovski.cassandra.jdbc;
 
+import java.nio.ByteBuffer;
 import java.sql.Types;
 
 public class JdbcByte extends AbstractJdbcType<Byte> {
@@ -31,7 +32,7 @@ public class JdbcByte extends AbstractJdbcType<Byte> {
     }
 
     public int getPrecision(Byte obj) {
-        return obj.toString().length();
+        return (obj == null) ? 4 : obj.toString().length();
     }
 
     public boolean isCurrency() {
@@ -43,11 +44,26 @@ public class JdbcByte extends AbstractJdbcType<Byte> {
     }
 
     public String toString(Byte obj) {
+        if (obj == null) {
+            return null;
+        }
+
         return obj.toString();
     }
 
     public boolean needsQuotes() {
         return false;
+    }
+
+    public String getString(ByteBuffer bytes) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 1) {
+            throw new MarshalException(
+                    "A date is exactly 1 byte: " + bytes.remaining());
+        }
+
+        return toString(compose(bytes));
     }
 
     public Class<Byte> getType() {

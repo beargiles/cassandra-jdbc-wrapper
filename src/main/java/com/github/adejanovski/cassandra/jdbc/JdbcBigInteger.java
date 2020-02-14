@@ -18,10 +18,10 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.sql.Types;
 
-public class JdbcInteger extends AbstractJdbcType<BigInteger> {
-    public static final JdbcInteger instance = new JdbcInteger();
+public class JdbcBigInteger extends AbstractJdbcType<BigInteger> {
+    public static final JdbcBigInteger instance = new JdbcBigInteger();
 
-    JdbcInteger() {
+    JdbcBigInteger() {
     }
 
     public boolean isCaseSensitive() {
@@ -45,6 +45,10 @@ public class JdbcInteger extends AbstractJdbcType<BigInteger> {
     }
 
     public String toString(BigInteger obj) {
+        if (obj == null) {
+            return null;
+        }
+
         return obj.toString();
     }
 
@@ -52,12 +56,20 @@ public class JdbcInteger extends AbstractJdbcType<BigInteger> {
         return false;
     }
 
+    public String getString(ByteBuffer bytes) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        }
+
+        return toString(compose(bytes));
+    }
+
     public Class<BigInteger> getType() {
         return BigInteger.class;
     }
 
     public int getJdbcType() {
-        return Types.BIGINT;
+        return Types.DECIMAL;
     }
 
     public BigInteger compose(Object obj) {

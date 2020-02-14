@@ -14,6 +14,7 @@
  */
 package com.github.adejanovski.cassandra.jdbc;
 
+import java.nio.ByteBuffer;
 import java.sql.Types;
 
 public class JdbcShort extends AbstractJdbcType<Short> {
@@ -31,7 +32,8 @@ public class JdbcShort extends AbstractJdbcType<Short> {
     }
 
     public int getPrecision(Short obj) {
-        return obj.toString().length();
+        // max size is -32768
+        return (obj == null) ? 6 : obj.toString().length();
     }
 
     public boolean isCurrency() {
@@ -43,11 +45,26 @@ public class JdbcShort extends AbstractJdbcType<Short> {
     }
 
     public String toString(Short obj) {
+        if (obj == null) {
+            return null;
+        }
+
         return obj.toString();
     }
 
     public boolean needsQuotes() {
         return false;
+    }
+
+    public String getString(ByteBuffer bytes) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 2) {
+            throw new MarshalException(
+                    "A short is exactly 2 bytes: " + bytes.remaining());
+        }
+
+        return toString(compose(bytes));
     }
 
     public Class<Short> getType() {

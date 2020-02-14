@@ -16,24 +16,11 @@ package com.github.adejanovski.cassandra.jdbc;
 
 import java.nio.ByteBuffer;
 import java.sql.Types;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 // FIXME - ...
 // Durations are internally 3 ints. CqlDuration?
 public class JdbcDuration extends AbstractJdbcType<Date> {
-    public static final String[] iso8601Patterns = new String[] { "yyyy-MM-dd HH:mm",
-            "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mmZ", "yyyy-MM-dd HH:mm:ssZ",
-            "yyyy-MM-dd'T'HH:mm", "yyyy-MM-dd'T'HH:mmZ", "yyyy-MM-dd'T'HH:mm:ss",
-            "yyyy-MM-dd'T'HH:mm:ssZ", "yyyy-MM-dd", "yyyy-MM-ddZ", "yyyy-MM-dd'T'HH:mm:ss.SSS",
-            "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss",
-            "yyyy-MM-dd'T'HH:mm:ss.SSSZ" };
-    static final String DEFAULT_FORMAT = iso8601Patterns[3];
-    static final ThreadLocal<SimpleDateFormat> FORMATTER = new ThreadLocal<SimpleDateFormat>() {
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat(DEFAULT_FORMAT);
-        }
-    };
 
     public static final JdbcDuration instance = new JdbcDuration();
 
@@ -61,7 +48,7 @@ public class JdbcDuration extends AbstractJdbcType<Date> {
     }
 
     public String toString(Date obj) {
-        return FORMATTER.get().format(obj);
+        return "UNIMPLEMENTED";
     }
 
     public boolean needsQuotes() {
@@ -69,16 +56,15 @@ public class JdbcDuration extends AbstractJdbcType<Date> {
     }
 
     public String getString(ByteBuffer bytes) {
-        if (bytes.remaining() == 0) {
-            return "";
-        }
-        if (bytes.remaining() != 8) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 8) {
             throw new MarshalException(
                     "A date is exactly 8 bytes (stored as a long): " + bytes.remaining());
         }
 
         // uses ISO-8601 formatted string
-        return FORMATTER.get().format(new Date(bytes.getLong(bytes.position())));
+        return "UNIMPLEMENTED";
     }
 
     public Class<Date> getType() {

@@ -15,7 +15,6 @@
 package com.github.adejanovski.cassandra.jdbc;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.sql.Types;
 
@@ -46,6 +45,10 @@ public class JdbcDecimal extends AbstractJdbcType<BigDecimal> {
     }
 
     public String toString(BigDecimal obj) {
+        if (obj == null) {
+            return null;
+        }
+
         return obj.toPlainString();
     }
 
@@ -54,11 +57,11 @@ public class JdbcDecimal extends AbstractJdbcType<BigDecimal> {
     }
 
     public String getString(ByteBuffer bytes) {
-        if (bytes == null)
-            return "null";
-        if (bytes.remaining() == 0)
-            return "empty";
-        return compose(bytes).toPlainString();
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        }
+
+        return toString(compose(bytes));
     }
 
     public Class<BigDecimal> getType() {

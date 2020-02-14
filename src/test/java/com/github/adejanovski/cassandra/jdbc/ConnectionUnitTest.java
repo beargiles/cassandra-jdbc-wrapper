@@ -14,14 +14,11 @@
  */
 package com.github.adejanovski.cassandra.jdbc;
 
-import static org.testng.Assert.assertTrue;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
 import java.sql.SQLNonTransientException;
-import java.sql.Statement;
 
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
@@ -35,10 +32,11 @@ public class ConnectionUnitTest {
             .parseInt(System.getProperty("port", ConnectionDetails.getPort() + ""));
     private static final String KEYSPACE = "system";
     // private static final String CQLV3 = "3.0.0";
-    private static final String CONSISTENCY_QUORUM = "QUORUM";
+    // private static final String CONSISTENCY_QUORUM = "QUORUM";
 
     private static java.sql.Connection con = null;
 
+    @SuppressWarnings("unused")
     private static CCMBridge ccmBridge = null;
     private static boolean suiteLaunch = true;
 

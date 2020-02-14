@@ -413,5 +413,4 @@ public class CassandraConnection extends AbstractConnection implements Connectio
 
         return typeMap;
     }
-
 }

@@ -17,16 +17,8 @@ package com.github.adejanovski.cassandra.jdbc;
 import java.nio.ByteBuffer;
 import java.sql.Time;
 import java.sql.Types;
-import java.text.SimpleDateFormat;
 
 public class JdbcTime extends AbstractJdbcType<Time> {
-    public static final String[] iso8601Patterns = new String[] { "HH:mm:ss", "HHmmss" };
-    static final String DEFAULT_FORMAT = iso8601Patterns[0];
-    static final ThreadLocal<SimpleDateFormat> FORMATTER = new ThreadLocal<SimpleDateFormat>() {
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat(DEFAULT_FORMAT);
-        }
-    };
 
     public static final JdbcTime instance = new JdbcTime();
 
@@ -42,7 +34,8 @@ public class JdbcTime extends AbstractJdbcType<Time> {
     }
 
     public int getPrecision(Time obj) {
-        return -1;
+        // format is always 'hh:mm:ss[.SSSSSS]'
+        return (obj == null) ? 15 : toString(obj).length();
     }
 
     public boolean isCurrency() {
@@ -54,7 +47,7 @@ public class JdbcTime extends AbstractJdbcType<Time> {
     }
 
     public String toString(Time obj) {
-        return FORMATTER.get().format(obj);
+        return Utils.formatTime(obj);
     }
 
     public boolean needsQuotes() {
@@ -62,16 +55,19 @@ public class JdbcTime extends AbstractJdbcType<Time> {
     }
 
     public String getString(ByteBuffer bytes) {
-        if (bytes.remaining() == 0) {
-            return "";
-        }
-        if (bytes.remaining() != 8) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 8) {
             throw new MarshalException(
                     "A time is exactly 8 bytes (stored as an long): " + bytes.remaining());
         }
 
-        // uses ISO-8601 formatted string
-        return FORMATTER.get().format(new Time(bytes.getLong(bytes.position())));
+        Long nanos = bytes.getLong(bytes.position());
+        if (nanos == null) {
+            return null;
+        }
+
+        return toString(new Time(nanos));
     }
 
     public Class<Time> getType() {

@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -42,6 +43,7 @@ public class MetadataRow {
 
     private ArrayList<String> entries;
     private HashMap<String, Integer> names;
+    @SuppressWarnings("unused")
     private ColumnDefinitions colDefinitions;
     private ArrayList<ColumnDefinitions.Definition> definitions;
 
@@ -49,7 +51,6 @@ public class MetadataRow {
         entries = Lists.newArrayList();
         names = Maps.newHashMap();
         definitions = Lists.newArrayList();
-
     }
 
     public MetadataRow addEntry(String key, String value) {
@@ -130,17 +131,11 @@ public class MetadataRow {
         return getByte(names.get(name));
     }
 
-    public java.sql.Date getDate(int i) {
-        DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            return new java.sql.Date(FORMATTER.parse(entries.get(i)).getTime());
-        } catch (ParseException e) {
-            // FIXME - what should this do?
-            return new java.sql.Date(0);
-        }
+    public java.sql.Date getDate(int i) throws SQLException {
+        return Utils.parseDate(entries.get(i));
     }
 
-    public java.sql.Date getDate(String name) {
+    public java.sql.Date getDate(String name) throws SQLException {
         return getDate(names.get(name));
     }
 
@@ -214,16 +209,11 @@ public class MetadataRow {
         return null;
     }
 
-    public Timestamp getTimestamp(int i) {
-        DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            return new java.sql.Timestamp(FORMATTER.parse(entries.get(i)).getTime());
-        } catch (ParseException e) {
-            return null;
-        }
+    public Timestamp getTimestamp(int i) throws SQLException {
+        return Utils.parseTimestamp(entries.get(i));
     }
 
-    public Timestamp getTimestamp(String name) {
+    public Timestamp getTimestamp(String name) throws SQLException {
         return getTimestamp(names.get(name));
     }
 
@@ -247,11 +237,11 @@ public class MetadataRow {
         return null;
     }
 
-    public Time getTime(int i) {
-        return null;
+    public Time getTime(int i) throws SQLException {
+        return Utils.parseTime(entries.get(i));
     }
 
-    public Time getTime(String name) {
+    public Time getTime(String name) throws SQLException {
         return getTime(names.get(name));
     }
 
@@ -300,5 +290,4 @@ public class MetadataRow {
         }
         return "[" + builder.toString() + "]";
     }
-
 }

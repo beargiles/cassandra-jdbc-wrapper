@@ -17,10 +17,10 @@ package com.github.adejanovski.cassandra.jdbc;
 import java.nio.ByteBuffer;
 import java.sql.Types;
 
-public class JdbcInt32 extends AbstractJdbcType<Integer> {
-    public static final JdbcInt32 instance = new JdbcInt32();
+public class JdbcInt extends AbstractJdbcType<Integer> {
+    public static final JdbcInt instance = new JdbcInt();
 
-    JdbcInt32() {
+    JdbcInt() {
     }
 
     public boolean isCaseSensitive() {
@@ -32,7 +32,8 @@ public class JdbcInt32 extends AbstractJdbcType<Integer> {
     }
 
     public int getPrecision(Integer obj) {
-        return obj.toString().length();
+        // max size is -2147483648
+        return (obj == null) ? 11 : obj.toString().length();
     }
 
     public boolean isCurrency() {
@@ -44,11 +45,26 @@ public class JdbcInt32 extends AbstractJdbcType<Integer> {
     }
 
     public String toString(Integer obj) {
+        if (obj == null) {
+            return null;
+        }
+
         return obj.toString();
     }
 
     public boolean needsQuotes() {
         return false;
+    }
+
+    public String getString(ByteBuffer bytes) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 4) {
+            throw new MarshalException(
+                    "An integer is exactly 4 bytes: " + bytes.remaining());
+        }
+
+        return toString(compose(bytes));
     }
 
     public Class<Integer> getType() {

@@ -51,6 +51,17 @@ public class JdbcFloat extends AbstractJdbcType<Float> {
         return false;
     }
 
+    public String getString(ByteBuffer bytes) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 4) {
+            throw new MarshalException(
+                    "A float is exactly 4 bytes: " + bytes.remaining());
+        }
+
+        return toString(bytes.getFloat(bytes.position()));
+    }
+
     public Class<Float> getType() {
         return Float.class;
     }

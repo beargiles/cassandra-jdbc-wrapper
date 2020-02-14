@@ -18,30 +18,14 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.InetAddress;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 //import com.datastax.driver.core.CCMBridge;
 import com.github.adejanovski.cassandra.jdbc.CassandraStatement;
@@ -58,6 +42,7 @@ public class MetadataResultSetsUnitTest {
 
     private static java.sql.Connection con = null;
 
+    @SuppressWarnings("unused")
     private static CCMBridge ccmBridge = null;
 
     private static boolean suiteLaunch = true;

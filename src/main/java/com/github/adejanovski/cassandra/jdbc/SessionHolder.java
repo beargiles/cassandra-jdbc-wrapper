@@ -14,15 +14,8 @@
  */
 package com.github.adejanovski.cassandra.jdbc;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,26 +26,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.CodecRegistry;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SocketOptions;
-import com.datastax.driver.core.TypeCodec;
 import com.datastax.driver.core.exceptions.DriverException;
 import com.datastax.driver.core.policies.RoundRobinPolicy;
 import com.datastax.driver.core.policies.TokenAwarePolicy;
-import com.github.adejanovski.cassandra.jdbc.codec.BigDecimalToLongCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.BigIntegerToIntCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.BigIntegerToLongCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.DoubleToDecimalCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.DoubleToFloatCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.IntToBigIntegerCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.IntToLongCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.IntToShortCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.LongToBigIntegerCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.LongToIntCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.LongToTimestampCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.ShortToIntCodec;
-import com.github.adejanovski.cassandra.jdbc.codec.TimestampToLongCodec;
 
 import static com.github.adejanovski.cassandra.jdbc.Utils.*;
 
@@ -198,27 +176,12 @@ class SessionHolder {
             }
         }
 
-        // Declare and register codecs
-        List<TypeCodec<?>> codecs = new ArrayList<TypeCodec<?>>();
-        CodecRegistry customizedRegistry = new CodecRegistry();
-
-        // codecs.add(new BigDecimalToLongCodec(BigDecimal.class));
-        codecs.add(new BigIntegerToIntCodec(BigInteger.class));
-        codecs.add(new BigIntegerToLongCodec(BigInteger.class));
-        // codecs.add(new DoubleToDecimalCodec(Double.class));
-        // codecs.add(new DoubleToFloatCodec(Double.class));
-        codecs.add(new IntToBigIntegerCodec(Integer.class));
-        codecs.add(new IntToLongCodec(Long.class));
-        codecs.add(new IntToShortCodec(Short.class));
-        codecs.add(new LongToBigIntegerCodec(Long.class));
-        codecs.add(new LongToIntCodec(Integer.class));
-        codecs.add(new LongToTimestampCodec(Timestamp.class));
-        codecs.add(new ShortToIntCodec(Integer.class));
-        codecs.add(new TimestampToLongCodec(Long.class));
-
-        customizedRegistry.register(codecs);
-        builder.withCodecRegistry(customizedRegistry);
-        // end of codec register5
+        // we don't currently need codecs but leaving this code in place
+        // as a reminder if that changes.
+        //List<TypeCodec<?>> codecs = new ArrayList<TypeCodec<?>>();
+        //CodecRegistry customizedRegistry = new CodecRegistry();
+        //customizedRegistry.register(codecs);
+        //builder.withCodecRegistry(customizedRegistry);
 
         Cluster cluster = null;
         try {

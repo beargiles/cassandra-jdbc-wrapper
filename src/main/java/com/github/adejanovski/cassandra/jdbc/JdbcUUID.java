@@ -31,10 +31,9 @@ public class JdbcUUID extends AbstractJdbcUUID {
     }
 
     public String getString(ByteBuffer bytes) {
-        if (bytes.remaining() == 0) {
-            return "";
-        }
-        if (bytes.remaining() != 16) {
+        if ((bytes == null)  || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 16) {
             throw new MarshalException("UUIDs must be exactly 16 bytes");
         }
 

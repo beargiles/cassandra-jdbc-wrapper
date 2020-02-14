@@ -15,8 +15,6 @@
 package com.github.adejanovski.cassandra.jdbc;
 
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 
@@ -43,6 +41,7 @@ public class PooledUnitTest {
     private static final String CONSISTENCY = "ONE";
 
     private static java.sql.Connection con = null;
+    @SuppressWarnings("unused")
     private static CCMBridge ccmBridge = null;
 
     private static boolean suiteLaunch = true;

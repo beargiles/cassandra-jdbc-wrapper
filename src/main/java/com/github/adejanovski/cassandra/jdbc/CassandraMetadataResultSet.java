@@ -970,7 +970,7 @@ class CassandraMetadataResultSet extends AbstractResultSet implements CassandraR
                     length = 36;
                 if (jtype instanceof JdbcLong)
                     length = 8;
-                if (jtype instanceof JdbcInt32)
+                if (jtype instanceof JdbcInt)
                     length = 4;
                 if (jtype instanceof JdbcShort)
                     length = 2;

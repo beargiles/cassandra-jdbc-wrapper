@@ -44,6 +44,7 @@ public class MetadataResultSets {
      * 
      * @return {@code Column}
      */
+    @SuppressWarnings("unused")
     private static final MetadataRow makeColumn(String name, String value) {
         return new MetadataRow().addEntry(name, value);
     }
@@ -179,7 +180,7 @@ public class MetadataResultSets {
                                     .equals(column.getName())) {
                                 // COLUMN_SIZE
                                 int length = -1;
-                                AbstractJdbcType jtype = TypesMap
+                                AbstractJdbcType<?> jtype = TypesMap
                                         .getTypeForComparator(column.getType().toString());
 
                                 if (jtype instanceof JdbcBytes)
@@ -188,7 +189,7 @@ public class MetadataResultSets {
                                     length = Integer.MAX_VALUE;
                                 if (jtype instanceof JdbcUUID)
                                     length = 36;
-                                if (jtype instanceof JdbcInt32)
+                                if (jtype instanceof JdbcInt)
                                     length = 4;
                                 if (jtype instanceof JdbcLong)
                                     length = 8;

@@ -15,9 +15,6 @@
 package com.github.adejanovski.cassandra.jdbc;
 
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 import org.testng.AssertJUnit;
@@ -58,6 +55,7 @@ public class CollectionsUnitTest {
 
     private static java.sql.Connection con = null;
 
+    @SuppressWarnings("unused")
     private static CCMBridge ccmBridge = null;
 
     private static boolean suiteLaunch = true;

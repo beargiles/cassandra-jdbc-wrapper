@@ -15,18 +15,10 @@
 package com.github.adejanovski.cassandra.jdbc;
 
 import java.nio.ByteBuffer;
+import java.sql.Date;
 import java.sql.Types;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class JdbcDate extends AbstractJdbcType<Date> {
-    public static final String[] iso8601Patterns = new String[] { "yyyy-MM-dd", "yyyyMMdd" };
-    static final String DEFAULT_FORMAT = iso8601Patterns[0];
-    static final ThreadLocal<SimpleDateFormat> FORMATTER = new ThreadLocal<SimpleDateFormat>() {
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat(DEFAULT_FORMAT);
-        }
-    };
 
     public static final JdbcDate instance = new JdbcDate();
 
@@ -42,7 +34,8 @@ public class JdbcDate extends AbstractJdbcType<Date> {
     }
 
     public int getPrecision(Date obj) {
-        return -1;
+        // format is always 'yyyy-mm-dd'
+        return 10;
     }
 
     public boolean isCurrency() {
@@ -54,7 +47,11 @@ public class JdbcDate extends AbstractJdbcType<Date> {
     }
 
     public String toString(Date obj) {
-        return FORMATTER.get().format(obj);
+        if (obj == null) {
+            return null;
+        }
+
+        return Utils.formatDate(obj);
     }
 
     public boolean needsQuotes() {
@@ -62,16 +59,14 @@ public class JdbcDate extends AbstractJdbcType<Date> {
     }
 
     public String getString(ByteBuffer bytes) {
-        if (bytes.remaining() == 0) {
-            return "";
-        }
-        if (bytes.remaining() != 8) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 8) {
             throw new MarshalException(
                     "A date is exactly 8 bytes (stored as an long): " + bytes.remaining());
         }
 
-        // uses ISO-8601 formatted string
-        return FORMATTER.get().format(new Date(bytes.getLong(bytes.position())));
+        return toString(new Date(bytes.getLong(bytes.position())));
     }
 
     public Class<Date> getType() {

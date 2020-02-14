@@ -28,9 +28,9 @@ public class TypesMap {
         map.put("org.apache.cassandra.db.marshal.DecimalType", JdbcDecimal.instance);
         map.put("org.apache.cassandra.db.marshal.DoubleType", JdbcDouble.instance);
         map.put("org.apache.cassandra.db.marshal.FloatType", JdbcFloat.instance);
-        map.put("org.apache.cassandra.db.marshal.Int32Type", JdbcInt32.instance);
+        map.put("org.apache.cassandra.db.marshal.Int32Type", JdbcInt.instance);
         map.put("org.apache.cassandra.db.marshal.InetAddressType", JdbcInetAddress.instance);
-        map.put("org.apache.cassandra.db.marshal.IntegerType", JdbcInteger.instance);
+        map.put("org.apache.cassandra.db.marshal.IntegerType", JdbcBigInteger.instance);
         map.put("org.apache.cassandra.db.marshal.LexicalUUIDType", JdbcLexicalUUID.instance);
         map.put("org.apache.cassandra.db.marshal.LongType", JdbcLong.instance);
         map.put("org.apache.cassandra.db.marshal.TimeUUIDType", JdbcTimeUUID.instance);
@@ -47,7 +47,7 @@ public class TypesMap {
         map.put("org.apache.cassandra.db.marshal.double", JdbcDouble.instance);
         map.put("org.apache.cassandra.db.marshal.float", JdbcFloat.instance);
         map.put("org.apache.cassandra.db.marshal.inet", JdbcInetAddress.instance);
-        map.put("org.apache.cassandra.db.marshal.int", JdbcInt32.instance);
+        map.put("org.apache.cassandra.db.marshal.int", JdbcInt.instance);
         /*
          * list map set
          */
@@ -56,7 +56,7 @@ public class TypesMap {
         map.put("org.apache.cassandra.db.marshal.uuid", JdbcUUID.instance);
         map.put("org.apache.cassandra.db.marshal.timeuuid", JdbcTimeUUID.instance);
         map.put("org.apache.cassandra.db.marshal.varchar", JdbcUTF8.instance);
-        map.put("org.apache.cassandra.db.marshal.varint", JdbcInteger.instance);
+        map.put("org.apache.cassandra.db.marshal.varint", JdbcBigInteger.instance);
 
         // Cassandra 3.x types
         map.put("org.apache.cassandra.db.marshal.udt", JdbcUdt.instance);

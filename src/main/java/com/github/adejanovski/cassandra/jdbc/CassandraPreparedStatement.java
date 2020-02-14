@@ -34,7 +34,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.RowId;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLNonTransientException;
 import java.sql.SQLRecoverableException;
 import java.sql.SQLTransientException;
@@ -58,9 +57,7 @@ import com.datastax.driver.core.Duration;
 import com.datastax.driver.core.LocalDate;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.exceptions.CodecNotFoundException;
-import com.datastax.driver.core.exceptions.InvalidTypeException;
 import com.google.common.collect.Lists;
-import com.google.common.io.CharSource;
 import com.google.common.io.CharStreams;
 
 class CassandraPreparedStatement extends CassandraStatement implements PreparedStatement {

@@ -4,10 +4,11 @@
   <groupId>com.github.adejanovski</groupId>
   <artifactId>cassandra-jdbc-wrapper</artifactId>
   <name>Cassandra JDBC Wrapper</name>
-  <version>3.8.0</version>
+  <version>3.8.0-snaplogic</version>
   <description>JDBC wrapper for the DataStax CQL Java Driver.
 
-		This fork simply bumps the compiler version, updates the datastax jar, and adds a DURATION data type.</description>
+        This fork bumps the compiler version, depenencies, and adds the API v4 and v5
+        data types.</description>
   <url>https://github.com/adejanovski/cassandra-jdbc-wrapper</url>
   <inceptionYear>2015</inceptionYear>
   <developers>

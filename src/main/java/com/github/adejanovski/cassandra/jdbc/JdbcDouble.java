@@ -51,6 +51,17 @@ public class JdbcDouble extends AbstractJdbcType<Double> {
         return false;
     }
 
+    public String getString(ByteBuffer bytes) {
+        if ((bytes == null) || !bytes.hasRemaining()) {
+            return null;
+        } else if (bytes.remaining() != 8) {
+            throw new MarshalException(
+                    "A double is exactly 8 bytes: " + bytes.remaining());
+        }
+
+        return toString(bytes.getDouble(bytes.position()));
+    }
+
     public Class<Double> getType() {
         return Double.class;
     }
