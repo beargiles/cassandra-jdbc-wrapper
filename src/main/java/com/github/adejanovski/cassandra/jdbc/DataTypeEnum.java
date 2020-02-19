@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +34,7 @@ public enum DataTypeEnum {
     FLOAT(8, Float.class, DataType.Name.FLOAT, JdbcFloat.instance),
     INT(9, Integer.class, DataType.Name.INT, JdbcInt.instance),
     TEXT(10, String.class, DataType.Name.TEXT, null), // UTF8?
-    TIMESTAMP(11, Date.class, DataType.Name.TIMESTAMP, JdbcTimestamp.instance),
+    TIMESTAMP(11, Timestamp.class, DataType.Name.TIMESTAMP, JdbcTimestamp.instance),
     UUID(12, UUID.class, DataType.Name.UUID, JdbcUUID.instance),
     VARCHAR(13, String.class, DataType.Name.VARCHAR, JdbcUTF8.instance),
     VARINT(14, BigInteger.class, DataType.Name.VARINT, null),
@@ -182,6 +184,13 @@ public enum DataTypeEnum {
      * <td>ByteBuffer</td>
      * </tr>
      * <tr>
+<<<<<<< HEAD
+=======
+     * <td>DATE</td>
+     * <td>java.sql.Date</td>
+     * </tr>
+     * <tr>
+>>>>>>> 5dfe83ae47cca797211c7fc9234a619c72b1d6e3
      * <td>DECIMAL</td>
      * <td>BigDecimal</td>
      * </tr>
