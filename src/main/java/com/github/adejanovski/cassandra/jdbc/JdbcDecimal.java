@@ -29,11 +29,11 @@ public class JdbcDecimal extends AbstractJdbcType<BigDecimal> {
     }
 
     public int getScale(BigDecimal obj) {
-        return obj.scale();
+        return (obj == null) ? 0 : obj.scale();
     }
 
     public int getPrecision(BigDecimal obj) {
-        return obj.precision();
+        return (obj == null) ? Integer.MAX_VALUE : obj.precision();
     }
 
     public boolean isCurrency() {
@@ -45,11 +45,7 @@ public class JdbcDecimal extends AbstractJdbcType<BigDecimal> {
     }
 
     public String toString(BigDecimal obj) {
-        if (obj == null) {
-            return null;
-        }
-
-        return obj.toPlainString();
+        return (obj == null) ? null : obj.toPlainString();
     }
 
     public boolean needsQuotes() {
@@ -81,7 +77,6 @@ public class JdbcDecimal extends AbstractJdbcType<BigDecimal> {
      * the n bytes it takes to store a BigInteger.
      */
     public Object decompose(BigDecimal value) {
-        return (Object) value;
+        return value;
     }
-
 }

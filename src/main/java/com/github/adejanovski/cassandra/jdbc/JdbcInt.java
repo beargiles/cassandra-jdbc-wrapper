@@ -45,11 +45,7 @@ public class JdbcInt extends AbstractJdbcType<Integer> {
     }
 
     public String toString(Integer obj) {
-        if (obj == null) {
-            return null;
-        }
-
-        return obj.toString();
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
@@ -80,6 +76,6 @@ public class JdbcInt extends AbstractJdbcType<Integer> {
     }
 
     public Object decompose(Integer value) {
-        return (Object) value;
+        return value;
     }
 }

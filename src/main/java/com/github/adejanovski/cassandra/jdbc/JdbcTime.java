@@ -62,12 +62,7 @@ public class JdbcTime extends AbstractJdbcType<Time> {
                     "A time is exactly 8 bytes (stored as an long): " + bytes.remaining());
         }
 
-        Long nanos = bytes.getLong(bytes.position());
-        if (nanos == null) {
-            return null;
-        }
-
-        return toString(new Time(nanos));
+        return toString(new Time(bytes.getLong(bytes.position())));
     }
 
     public Class<Time> getType() {
@@ -83,7 +78,6 @@ public class JdbcTime extends AbstractJdbcType<Time> {
     }
 
     public Object decompose(Time value) {
-        return (value == null) ? null : (Object) value;
+        return value;
     }
-
 }

@@ -20,7 +20,7 @@ import java.util.Date;
 
 // FIXME - ...
 // Durations are internally 3 ints. CqlDuration?
-public class JdbcDuration extends AbstractJdbcType<Date> {
+public class JdbcDuration extends JdbcOther {
 
     public static final JdbcDuration instance = new JdbcDuration();
 
@@ -31,56 +31,43 @@ public class JdbcDuration extends AbstractJdbcType<Date> {
         return false;
     }
 
-    public int getScale(Date obj) {
+    public int getScale(String obj) {
         return -1;
     }
 
-    public int getPrecision(Date obj) {
+    public int getPrecision(String obj) {
         return -1;
-    }
-
-    public boolean isCurrency() {
-        return false;
     }
 
     public boolean isSigned() {
         return false;
     }
 
-    public String toString(Date obj) {
-        return "UNIMPLEMENTED";
-    }
-
     public boolean needsQuotes() {
-        return false;
+        return true;
     }
 
     public String getString(ByteBuffer bytes) {
         if ((bytes == null) || !bytes.hasRemaining()) {
             return null;
-        } else if (bytes.remaining() != 8) {
+        } else if (bytes.remaining() != 12) {
+            // three ints, or an int and two longs?
             throw new MarshalException(
-                    "A date is exactly 8 bytes (stored as a long): " + bytes.remaining());
+                    "A duration is exactly 12 bytes (stored as three ints): " + bytes.remaining());
         }
 
         // uses ISO-8601 formatted string
+        // may be able to use datastax duration class
         return "UNIMPLEMENTED";
     }
 
-    public Class<Date> getType() {
-        return Date.class;
+    public String compose(Object value) {
+        // this is where datastax duration is converted to string
+        return (value == null) ? null : value.toString();
     }
 
-    public int getJdbcType() {
-        return Types.OTHER;
+    public Object decompose(String value) {
+        // this is where string is converted to datastax duration
+        return value;
     }
-
-    public Date compose(Object value) {
-        return (Date) value;
-    }
-
-    public Object decompose(Date value) {
-        return (value == null) ? null : (Object) value;
-    }
-
 }

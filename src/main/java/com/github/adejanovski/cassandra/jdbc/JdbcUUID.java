@@ -24,6 +24,9 @@ public class JdbcUUID extends AbstractJdbcUUID {
     }
 
     public UUID compose(ByteBuffer bytes) {
+        if (bytes == null) {
+            return null;
+        }
         bytes = bytes.slice();
         if (bytes.remaining() < 16)
             return new UUID(0, 0);
@@ -41,13 +44,11 @@ public class JdbcUUID extends AbstractJdbcUUID {
     }
 
     public UUID compose(Object obj) {
-        return UUID.fromString(obj.toString());
+        return (obj == null) ? null : UUID.fromString(obj.toString());
     }
 
     @Override
     public Object decompose(UUID obj) {
-        // TODO Auto-generated method stub
-        return (Object) obj;
+        return obj;
     }
-
 }

@@ -80,7 +80,6 @@ public class JdbcTimestamp extends AbstractJdbcType<Timestamp> {
     }
 
     public Object decompose(Timestamp value) {
-        return (value == null) ? null : (Object) value;
+        return value;
     }
-
 }

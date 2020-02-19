@@ -44,11 +44,7 @@ public class JdbcByte extends AbstractJdbcType<Byte> {
     }
 
     public String toString(Byte obj) {
-        if (obj == null) {
-            return null;
-        }
-
-        return obj.toString();
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
@@ -79,6 +75,6 @@ public class JdbcByte extends AbstractJdbcType<Byte> {
     }
 
     public Object decompose(Byte value) {
-        return (Object) value;
+        return value;
     }
 }

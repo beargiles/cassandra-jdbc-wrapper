@@ -45,7 +45,7 @@ public class JdbcBoolean extends AbstractJdbcType<Boolean> {
     }
 
     public String toString(Boolean obj) {
-        return obj.toString();
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
@@ -78,6 +78,6 @@ public class JdbcBoolean extends AbstractJdbcType<Boolean> {
     }
 
     public Object decompose(Boolean value) {
-        return (value == null) ? null : (Object) value;
+        return null;
     }
 }

@@ -5,15 +5,14 @@
 
 	<groupId>com.github.adejanovski</groupId>
 	<artifactId>cassandra-jdbc-wrapper</artifactId>
-	<version>3.8.0-snaplogic</version>
+	<version>3.7.0-snaplogic</version>
 
 	<packaging>jar</packaging>
 	<name>Cassandra JDBC Wrapper</name>
 	<description>
-		JDBC wrapper for the DataStax CQL Java Driver.
-
-        This fork bumps the compiler version, depenencies, and adds the API v4 and v5
-        data types.
+		JDBC wrapper for the DataStax CQL Java Driver. The version number
+		matches the required version number of the datastax jars. Do not
+		mix them - you'll get ClassNotFoundExceptions if you do!
 	</description>
 	<url>https://github.com/adejanovski/cassandra-jdbc-wrapper</url>
 
@@ -45,7 +44,7 @@
 		<cassandra.version>2.1.9</cassandra.version>
 		<gpg.useagent>true</gpg.useagent>
 		<cassandra.host>localhost</cassandra.host>
-		<datastax.java.driver.version>3.8.0</datastax.java.driver.version>
+		<datastax.java.driver.version>3.7.0</datastax.java.driver.version>
 	</properties>
 
 	<dependencies>

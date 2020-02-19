@@ -44,7 +44,7 @@ public class JdbcFloat extends AbstractJdbcType<Float> {
     }
 
     public String toString(Float obj) {
-        return obj.toString();
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
@@ -75,6 +75,6 @@ public class JdbcFloat extends AbstractJdbcType<Float> {
     }
 
     public Object decompose(Float value) {
-        return (Object) value;
+        return value;
     }
 }

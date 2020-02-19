@@ -33,7 +33,7 @@ public class JdbcBigInteger extends AbstractJdbcType<BigInteger> {
     }
 
     public int getPrecision(BigInteger obj) {
-        return obj.toString().length();
+        return (obj == null) ? Integer.MAX_VALUE : obj.toString().length();
     }
 
     public boolean isCurrency() {
@@ -45,11 +45,7 @@ public class JdbcBigInteger extends AbstractJdbcType<BigInteger> {
     }
 
     public String toString(BigInteger obj) {
-        if (obj == null) {
-            return null;
-        }
-
-        return obj.toString();
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
@@ -77,6 +73,6 @@ public class JdbcBigInteger extends AbstractJdbcType<BigInteger> {
     }
 
     public Object decompose(BigInteger value) {
-        return (Object) value;
+        return value;
     }
 }

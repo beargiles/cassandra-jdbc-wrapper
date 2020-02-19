@@ -48,7 +48,7 @@ public class JdbcInetAddress extends AbstractJdbcType<InetAddress> {
     }
 
     public String toString(InetAddress obj) {
-        return obj.getHostAddress();
+        return (obj == null) ? null : obj.getHostAddress();
     }
 
     public boolean needsQuotes() {
@@ -76,6 +76,6 @@ public class JdbcInetAddress extends AbstractJdbcType<InetAddress> {
     }
 
     public Object decompose(InetAddress value) {
-        return (Object) value.getAddress();
+        return value.getAddress();
     }
 }

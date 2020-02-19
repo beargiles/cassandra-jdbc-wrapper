@@ -44,7 +44,7 @@ public class JdbcDouble extends AbstractJdbcType<Double> {
     }
 
     public String toString(Double obj) {
-        return obj.toString();
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
@@ -75,6 +75,6 @@ public class JdbcDouble extends AbstractJdbcType<Double> {
     }
 
     public Object decompose(Double value) {
-        return (value == null) ? null : (Object) value;
+        return value;
     }
 }

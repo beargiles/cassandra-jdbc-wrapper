@@ -51,7 +51,7 @@ public class JdbcUTF8 extends AbstractJdbcType<String> {
     }
 
     public String getString(Object bytes) {
-        return bytes.toString();
+        return (bytes == null) ? null : bytes.toString();
     }
 
     public Class<String> getType() {
@@ -67,6 +67,6 @@ public class JdbcUTF8 extends AbstractJdbcType<String> {
     }
 
     public Object decompose(String value) {
-        return (Object) value;
+        return value;
     }
 }

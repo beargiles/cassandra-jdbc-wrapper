@@ -45,11 +45,7 @@ public class JdbcShort extends AbstractJdbcType<Short> {
     }
 
     public String toString(Short obj) {
-        if (obj == null) {
-            return null;
-        }
-
-        return obj.toString();
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
@@ -80,6 +76,6 @@ public class JdbcShort extends AbstractJdbcType<Short> {
     }
 
     public Object decompose(Short value) {
-        return (Object) value;
+        return value;
     }
 }

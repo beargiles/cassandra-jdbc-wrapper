@@ -53,8 +53,7 @@ public class JdbcAscii extends AbstractJdbcType<String> {
     }
 
     public String getString(Object obj) {
-        return obj.toString();
-
+        return (obj == null) ? null : obj.toString();
     }
 
     public Class<String> getType() {
@@ -66,7 +65,7 @@ public class JdbcAscii extends AbstractJdbcType<String> {
     }
 
     public String compose(Object obj) {
-        return obj.toString();
+        return (obj == null) ? null : obj.toString();
     }
 
     public Object decompose(String value) {

@@ -45,11 +45,7 @@ public class JdbcLong extends AbstractJdbcType<Long> {
     }
 
     public String toString(Long obj) {
-        if (obj == null) {
-            return null;
-        }
-
-        return obj.toString();
+        return (obj == null) ? null : obj.toString();
     }
 
     public boolean needsQuotes() {
@@ -79,6 +75,6 @@ public class JdbcLong extends AbstractJdbcType<Long> {
     }
 
     public Object decompose(Long value) {
-        return (Object) value;
+        return value;
     }
 }

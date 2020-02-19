@@ -47,11 +47,7 @@ public class JdbcDate extends AbstractJdbcType<Date> {
     }
 
     public String toString(Date obj) {
-        if (obj == null) {
-            return null;
-        }
-
-        return Utils.formatDate(obj);
+        return (obj == null) ? null : Utils.formatDate(obj);
     }
 
     public boolean needsQuotes() {
@@ -82,7 +78,6 @@ public class JdbcDate extends AbstractJdbcType<Date> {
     }
 
     public Object decompose(Date value) {
-        return (value == null) ? null : (Object) value;
+        return value;
     }
-
 }
