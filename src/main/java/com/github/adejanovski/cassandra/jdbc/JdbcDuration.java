@@ -15,8 +15,6 @@
 package com.github.adejanovski.cassandra.jdbc;
 
 import java.nio.ByteBuffer;
-import java.sql.Types;
-import java.util.Date;
 
 // FIXME - ...
 // Durations are internally 3 ints. CqlDuration?

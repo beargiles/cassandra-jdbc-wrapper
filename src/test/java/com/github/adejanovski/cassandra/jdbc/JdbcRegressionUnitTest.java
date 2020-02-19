@@ -14,12 +14,6 @@
  */
 package com.github.adejanovski.cassandra.jdbc;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.Test;
-import org.testng.annotations.BeforeClass;
-import org.testng.AssertJUnit;
-import org.testng.Assert;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -33,8 +27,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLTransientException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,13 +38,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.testng.Assert;
+import org.testng.AssertJUnit;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
 //import com.datastax.driver.core.CCMBridge;
 //import com.datastax.driver.core.CCMBridge.CCMCluster;
 import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.TupleValue;
 import com.datastax.driver.core.UDTValue;
-import com.github.adejanovski.cassandra.jdbc.CassandraStatement;
-import com.github.adejanovski.cassandra.jdbc.CassandraStatementExtras;
 
 public class JdbcRegressionUnitTest {
     private static String HOST = System.getProperty("host", ConnectionDetails.getHost());

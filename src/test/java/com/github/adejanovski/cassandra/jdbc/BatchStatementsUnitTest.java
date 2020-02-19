@@ -15,10 +15,6 @@ package com.github.adejanovski.cassandra.jdbc;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.Test;
-import org.testng.annotations.BeforeClass;
-
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,9 +25,9 @@ import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//import com.datastax.driver.core.CCMBridge;
-import com.github.adejanovski.cassandra.jdbc.CassandraStatement;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 public class BatchStatementsUnitTest {
 

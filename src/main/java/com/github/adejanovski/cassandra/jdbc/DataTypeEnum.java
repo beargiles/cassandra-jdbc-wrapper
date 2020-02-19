@@ -13,10 +13,10 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.datastax.driver.core.DataType;
-import com.datastax.driver.core.TupleValue;
-import com.datastax.driver.core.UDTValue;
 import com.datastax.driver.core.DataType.Name;
 import com.datastax.driver.core.Duration;
+import com.datastax.driver.core.TupleValue;
+import com.datastax.driver.core.UDTValue;
 import com.datastax.driver.core.exceptions.DriverInternalError;
 import com.google.common.collect.Maps;
 
@@ -184,13 +184,10 @@ public enum DataTypeEnum {
      * <td>ByteBuffer</td>
      * </tr>
      * <tr>
-<<<<<<< HEAD
-=======
      * <td>DATE</td>
      * <td>java.sql.Date</td>
      * </tr>
      * <tr>
->>>>>>> 5dfe83ae47cca797211c7fc9234a619c72b1d6e3
      * <td>DECIMAL</td>
      * <td>BigDecimal</td>
      * </tr>
@@ -240,7 +237,7 @@ public enum DataTypeEnum {
      * </tr>
      * <tr>
      * <td>TIMESTAMP</td>
-     * <td>Date</td>
+     * <td>kava.sql.Timestamp</td>
      * </tr>
      * <tr>
      * <td>TIMEUUID</td>
